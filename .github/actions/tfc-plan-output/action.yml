@@ -1,0 +1,15 @@
+name: 'Output Terraform Plan'
+description: 'Invoke Terraform API to return plan output in Terraform Cloud.'
+inputs:
+  token:
+    description: 'Terraform Cloud Token'
+    required: true
+  planId:
+    description: 'Plan Id'
+    required: true    
+outputs:
+  planOutput: 
+    description: 'Plan JSON output'
+runs:
+  using: 'node16'
+  main: 'index.js'

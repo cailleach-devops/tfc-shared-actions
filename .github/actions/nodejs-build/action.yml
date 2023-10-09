@@ -1,0 +1,15 @@
+name: 'Build and test the service'
+description: 'Build and test the service.'
+inputs:
+  serviceName:
+    description: 'Service Name'
+    required: true
+  environmentName:
+    description: 'Deployment environment name'
+    required: true
+outputs:
+  workSpaceId: 
+    description: 'Terraform WorkspaceId'
+runs:
+  using: 'node16'
+  main: 'index.js'

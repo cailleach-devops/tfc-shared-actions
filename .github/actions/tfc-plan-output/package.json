@@ -1,0 +1,13 @@
+{
+  "name": "terraform-output",
+  "version": "1.0.0",
+  "description": "GitHub Action to return terraform workspace plan using terraform API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@actions/core": "^1.10.1",
+    "axios": "^1.5.1"
+  }
+}
