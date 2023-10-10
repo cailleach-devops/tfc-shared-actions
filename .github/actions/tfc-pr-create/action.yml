@@ -45,7 +45,7 @@ runs:
         plan_only: true
 
     - name: Get Plan Output
-      uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc-plan-output
+      uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc-plan-output@main
       id: plan-output
       with:
         token: "${{ inputs.tfc-token }}"
