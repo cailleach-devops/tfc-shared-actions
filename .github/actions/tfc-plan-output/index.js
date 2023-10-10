@@ -30,7 +30,7 @@ try{
           '|' + response.data.resource_changes[curResource].change.actions.toString() + '|\n';
         }
 
-        console.log(allChanges);
+        console.log(response.data);
 
         core.setOutput("planOutput", allChanges);
       }, (error) => {
