@@ -16,8 +16,7 @@ try{
           "name" : workSpaceName, 
           "execution-mode": "remote",
           "file-triggers-enabled": false,
-          "especulative-enabled": true,
-          "working-directory": "terraform"
+          "especulative-enabled": true
         },
         "type": "workspaces",
         "relationships": {
