@@ -15,6 +15,7 @@ try{
         { 
           "name" : workSpaceName, 
           "execution-mode": "remote",
+          "auto-apply": true,
           "file-triggers-enabled": false,
           "especulative-enabled": true
         },
