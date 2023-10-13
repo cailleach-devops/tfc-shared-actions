@@ -1,0 +1,42 @@
+name: 'ECR Copy Image'
+description: ""
+inputs:
+  from-access_key_id:
+    required: true
+  from-secret_access_key:
+    required: true
+  from-region:
+    required: true
+  to-access_key_id:
+    required: true
+  to-secret_access_key:
+    required: true
+  to-region:
+    required: true
+  repo:
+    required: true
+  tag:
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+
+    - name: Pull from ECR
+      uses: jwalton/gh-ecr-push@v1
+      with:
+        access-key-id: ${{ inputs.from-access_key_id }}
+        secret-access-key: ${{ inputs.from-secret_access_key }}
+        region: ${{inputs.from-region}}
+        image: ${{inputs.repo}}:${{ inputs.tag}}
+        local-image: temp-image
+        direction: pull
+
+    - name: Push to ECR
+      uses: jwalton/gh-ecr-push@v1
+      with:
+        access-key-id: ${{ inputs.to-access_key_id }}
+        secret-access-key: ${{ inputs.to-secret_access_key }}
+        region: ${{inputs.to-region}}
+        image: ${{inputs.repo}}:${{ inputs.tag}}
+        local-image: temp-image
