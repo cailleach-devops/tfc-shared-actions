@@ -14,6 +14,9 @@ inputs:
     required: false
     description: "Folder inside the project to find the Terraform Configuration"
     default: "terraform"
+  revision:
+    required: true
+    description: "Revision (branch or tag) to use"
 
 runs:
   using: "composite"
@@ -39,6 +42,7 @@ runs:
       env:
         TF_CLOUD_ORGANIZATION: ${{ inputs.tfc-organization }}
         TF_API_TOKEN: "${{ inputs.tfc-token }}"
+        TF_VAR_revision: "\"${{ inputs.revision }}\""
       with:
         workspace: ${{ inputs.tfc-workspace }}
         configuration_version: ${{ steps.plan-upload.outputs.configuration_version_id }}
