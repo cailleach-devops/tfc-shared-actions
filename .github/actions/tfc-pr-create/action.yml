@@ -17,6 +17,9 @@ inputs:
   revision:
     required: true
     description: "Revision (branch or tag) to use"
+  message:
+    required: true
+    description: "Reason for the terraform plan to run"
 
 runs:
   using: "composite"
@@ -47,6 +50,7 @@ runs:
         workspace: ${{ inputs.tfc-workspace }}
         configuration_version: ${{ steps.plan-upload.outputs.configuration_version_id }}
         plan_only: true
+        message: ${{ inputs.message }}
 
     - name: Get Plan Output
       uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc-plan-output@main
