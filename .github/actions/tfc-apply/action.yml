@@ -38,7 +38,7 @@ runs:
 
 
     - name: Create Plan Run
-      uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.0
+      uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.4
       id: plan-run
       env:
         TF_CLOUD_ORGANIZATION: ${{ inputs.tfc-organization }}
