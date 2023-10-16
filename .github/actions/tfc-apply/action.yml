@@ -16,6 +16,8 @@ inputs:
     default: "terraform"
   revision:
     required: true
+  message:
+    required: true
 
 runs:
   using: "composite"
@@ -46,6 +48,7 @@ runs:
         workspace: ${{ inputs.tfc-workspace }}
         configuration_version: ${{ steps.plan-upload.outputs.configuration_version_id }}
         plan_only: false
+        message: ${{ inputs.message }}
 
     - name: Get Plan Output
       uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc-plan-output@main
