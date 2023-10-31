@@ -1,0 +1,38 @@
+name: 'AWS Create service role'
+description: "Create a role for a service"
+inputs:
+  country:
+    required: true
+  environment:
+    required: true
+  service-name:
+    required: true
+  service-type:
+    required: true
+    default: "ecs-tasks"
+  region:
+    required: true
+  role:
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: configure aws credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ inputs.role }}
+        aws-region: ${{ inputs.region }}
+
+    - name: Create AWS IAM role
+      shell: bash
+      run: |
+
+        sed -i 's/__AWS_SERVICE__/${{inputs.service-type}}/g' ./.github/actions/aws-create-role/policy.json
+
+        aws iam create-role \
+          --role-name ${{inputs.country}}-${{inputs.environment}}-${{inputs.service-name}}-role \
+          --assume-role-policy-document file://./.github/actions/aws-create-role/policy.json
