@@ -1,0 +1,60 @@
+name: 'Terraform Cloud Apply'
+description: "Performs a Terraform Apply through TerraForm Cloud"
+inputs:
+  tfc-organization:
+    required: true
+    description: "Organization in Terraform Cloud"
+  tfc-token:
+    required: true
+    description: "Token to interact with Terraform Cloud"
+  tfc-workspace:
+    required: true
+    description: "Workspace in Terraform Cloud to use"
+  clusterName:
+    required: true    
+  serviceName:
+    required: true
+  revision:
+    required: true
+  message:
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Upload Configuration
+      uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
+      id: apply-upload
+      env:
+        TF_CLOUD_ORGANIZATION: ${{ inputs.tfc-organization }}
+        TF_API_TOKEN: "${{ inputs.tfc-token }}"
+      with:
+          workspace: ${{ inputs.tfc-workspace }}
+          directory: ./.github/actions/tfc-infra-apply
+          speculative: false
+
+
+    - name: Create Plan Run
+      uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.4
+      id: plan-run
+      env:
+        TF_CLOUD_ORGANIZATION: ${{ inputs.tfc-organization }}
+        TF_API_TOKEN: "${{ inputs.tfc-token }}"
+        TF_VAR_clusterName: "\"${{ inputs.clusterName }}\""
+        TF_VAR_serviceName: "\"${{ inputs.serviceName }}\""
+        TF_VAR_revision: "\"${{ inputs.revision }}\""
+      with:
+        workspace: ${{ inputs.tfc-workspace }}
+        configuration_version: ${{ steps.plan-upload.outputs.configuration_version_id }}
+        plan_only: false
+        message: ${{ inputs.message }}
+
+    - name: Get Plan Output
+      uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc-plan-output@main
+      id: plan-output
+      with:
+        token: "${{ inputs.tfc-token }}"
+        planId: ${{ fromJSON(steps.plan-run.outputs.payload).data.relationships.plan.data.id }}
