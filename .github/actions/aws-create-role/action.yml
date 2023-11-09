@@ -31,8 +31,8 @@ runs:
       shell: bash
       run: |
 
-        sed -i 's/__AWS_SERVICE__/${{inputs.service-type}}/g' CailleachOrg/tfc-shared-actions/.github/actions/aws-create-role/policy.json@main
+        sed -i 's/__AWS_SERVICE__/${{inputs.service-type}}/g' ${{github.action_path}}/policy.json
 
         aws iam create-role \
           --role-name ${{inputs.country}}-${{inputs.environment}}-${{inputs.service-name}}-role \
-          --assume-role-policy-document file://CailleachOrg/tfc-shared-actions/.github/actions/aws-create-role/policy.json@main
+          --assume-role-policy-document file://${{github.action_path}}/policy.json
