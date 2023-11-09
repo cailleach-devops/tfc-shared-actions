@@ -28,8 +28,9 @@ runs:
         aws-region: ${{ inputs.region }}
 
     - name: Check if role exists
+      continue-on-error: true
       shell: bash
-      run: aws iam get-role ${{inputs.country}}-${{inputs.environment}}-${{inputs.service-name}}-role
+      run: aws iam get-role --role-name ${{inputs.country}}-${{inputs.environment}}-${{inputs.service-name}}-role
 
     - name: Create AWS IAM role
       if: #{{ failure() }}
