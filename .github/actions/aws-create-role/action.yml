@@ -33,7 +33,7 @@ runs:
       run: aws iam get-role --role-name ${{inputs.country}}-${{inputs.environment}}-${{inputs.service-name}}-role
 
     - name: Create AWS IAM role
-      if: #{{ failure() }}
+      if: failure()
       shell: bash
       run: |
 
