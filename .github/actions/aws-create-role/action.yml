@@ -27,7 +27,11 @@ runs:
         role-to-assume: ${{ inputs.role }}
         aws-region: ${{ inputs.region }}
 
+    - name: Check if role exists
+      run: aws iam get-role ${{inputs.country}}-${{inputs.environment}}-${{inputs.service-name}}-role
+
     - name: Create AWS IAM role
+      if: #{{ failure() }}
       shell: bash
       run: |
 
