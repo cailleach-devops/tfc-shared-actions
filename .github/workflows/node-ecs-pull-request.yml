@@ -40,9 +40,9 @@ jobs:
         country: ${{ vars.COUNTRY }}
         region: ${{ inputs.aws-region }}
         role: ${{ inputs.aws-role }}
-        environment: $environment_name
+        environment: ${{ env.environment_name }}
         service-name: ${{ vars.ECS_SERVICE }}
-        service-type: '$SERVICE_TYPE'
+        service-type: ${{ env.SERVICE_TYPE }}
 
   terraform-app-plan:
     runs-on: ubuntu-latest
@@ -58,7 +58,7 @@ jobs:
       with:
         tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
         tfc-token: "${{ secrets.TFC_TOKEN }}"
-        tfc-workspace: "${{github.event.repository.name}}-app-$environment_name"
+        tfc-workspace: "${{github.event.repository.name}}-app-${{ env.environment_name }}"
         message: "${{ github.event.pull_request.title }}"
 
   terraform-infra-plan:
@@ -75,7 +75,7 @@ jobs:
       with:
         tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
         tfc-token: "${{ secrets.TFC_TOKEN }}"
-        tfc-workspace: "${{github.event.repository.name}}-infra-$environment_name"
+        tfc-workspace: "${{github.event.repository.name}}-infra-${{ env.environment_name }}"
         message: "${{ github.event.pull_request.title }}"
 
 
