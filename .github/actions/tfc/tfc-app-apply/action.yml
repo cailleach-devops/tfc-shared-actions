@@ -10,10 +10,10 @@ inputs:
   tfc-workspace:
     required: true
     description: "Workspace in Terraform Cloud to use"
-  clusterName:
-    required: true    
-  serviceName:
-    required: true
+  tf-cfg-directory:
+    required: false
+    description: "Folder inside the project to find the Terraform Configuration"
+    default: "terraform"
   revision:
     required: true
   message:
@@ -33,28 +33,19 @@ runs:
         TF_API_TOKEN: "${{ inputs.tfc-token }}"
       with:
           workspace: ${{ inputs.tfc-workspace }}
-          directory: ./.github/actions/tfc-infra-apply
+          directory: ${{ inputs.tf-cfg-directory }}
           speculative: false
 
 
-    - name: Create Plan Run
+    - name: Create Apply Run
       uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.4
-      id: plan-run
+      id: apply-run
       env:
         TF_CLOUD_ORGANIZATION: ${{ inputs.tfc-organization }}
         TF_API_TOKEN: "${{ inputs.tfc-token }}"
-        TF_VAR_clusterName: "\"${{ inputs.clusterName }}\""
-        TF_VAR_serviceName: "\"${{ inputs.serviceName }}\""
         TF_VAR_revision: "\"${{ inputs.revision }}\""
       with:
         workspace: ${{ inputs.tfc-workspace }}
         configuration_version: ${{ steps.plan-upload.outputs.configuration_version_id }}
         plan_only: false
         message: ${{ inputs.message }}
-
-    - name: Get Plan Output
-      uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc-plan-output@main
-      id: plan-output
-      with:
-        token: "${{ inputs.tfc-token }}"
-        planId: ${{ fromJSON(steps.plan-run.outputs.payload).data.relationships.plan.data.id }}

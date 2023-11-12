@@ -1,0 +1,127 @@
+name: 'OnPublishECS'
+
+on:  
+  workflow_call:
+    inputs:
+      environment_name:
+        required: true
+        type: string
+      aws-account-id:
+        required: true
+        type: string
+      aws-region:
+        required: true
+        type: string
+      aws-role:
+        required: true
+        type: string
+      revision:
+        required: true
+        type: string
+
+env:
+  SERVICE_TYPE: 'ecs-tasks'
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+
+  create-role:
+    runs-on: ubuntu-latest
+    - name: "Create ${{ inputs.environment_name }} Role"
+      uses: CailleachOrg/tfc-shared-actions/.github/actions/aws/aws-create-role@new-pipe
+      with:
+        country: ${{ vars.COUNTRY }}
+        region: ${{ inputs.aws-region }}
+        role: ${{ inputs.aws-role }}
+        environment: ${{ inputs.environment_name}}
+        service-name: ${{ vars.ECS_SERVICE }}
+        service-type: '$SERVICE_TYPE'
+
+  terraform-app-apply:
+    runs-on: ubuntu-latest
+    depends_on: [ create-role ]
+
+    steps:
+    - id: checkout
+      name: checkout
+      uses: actions/checkout@v4
+      
+    - name: "Terraform Apply"
+      uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-app-apply@main
+      with:
+        tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
+        tfc-token: "${{ secrets.TFC_TOKEN }}"
+        tfc-workspace: "${{github.event.repository.name}}-app-${{ inputs.environment_name }}"
+        message: "GitHub Push in Main Branch"
+
+  app-build:
+    runs-on: ubuntu-latest
+    steps:
+    - id: checkout
+      name: checkout
+      uses: actions/checkout@v4
+
+    - name: buildAndUnityTest
+      uses: CailleachOrg/tfc-shared-actions/.github/actions/node/node-build@main
+      with:
+        node-version: '20.x'
+
+  database-apply:
+    runs-on: ubuntu-latest
+    depends_on: [ create-role ]
+    steps:
+    - id: checkout
+      name: checkout
+      uses: actions/checkout@v4
+      
+    - name: "Someday"
+      shell: bash
+      run: echo "TO BE IMPLEMENTED..."
+
+  app-publish:
+    runs-on: ubuntu-latest
+    depends_on: [ database-apply, terraform-app-apply, app-build]
+
+    steps:
+    - id: checkout
+      name: checkout
+      uses: actions/checkout@v4
+
+    - name: Docker Deploy
+      uses: CailleachOrg/tfc-shared-actions/.github/actions/node/node-docker-deploy@main
+      with:
+        node-version: '20.x'
+        service-name: ${{ vars.ECS_SERVICE }}
+        revision: ${{ inputs.revision }}
+        aws-account-id: ${{ inputs.aws-account-id }}
+        aws-region: ${{ inputs.aws-region }}
+
+  infra-publish:
+    runs-on: ubuntu-latest
+    depends_on: [ database-apply, terraform-app-apply, app-build]
+
+    steps:
+    - id: checkout
+      name: checkout
+      uses: actions/checkout@v4
+
+    - name: "Terraform Infra Apply"
+      uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-ecs-infra-apply@main
+      with:
+        tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
+        tfc-token: "${{ secrets.TFC_TOKEN }}"
+        tfc-workspace: "${{github.event.repository.name}}-infra-${{ inputs.environment_name }}"
+        revision: ${{ inputs.revision }}
+        message: "GitHub Push in Main Branch"
+
+
+  app-rollout:
+    runs-on: ubuntu-latest
+    depends_on: [ app-publish, infra-publish]
+
+    steps:
+    - name: Wait for Finish
+      run: echo "Finished..."

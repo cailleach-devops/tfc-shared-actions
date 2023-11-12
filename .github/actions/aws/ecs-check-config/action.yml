@@ -1,0 +1,47 @@
+name: 'ECS Check Repo Config'
+description: "Check if needed repository variables are created and update PR"
+inputs:
+  ecs-cluster:
+    required: false
+  ecs-service:
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    - name: Update PR
+      if: ${{ (ecs-cluster == '') || (ecs-service == '') }}
+      uses: actions/github-script@v6
+      with:
+        script: |
+          // 1. Retrieve existing bot comments for the PR
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+          });
+          const botComment = comments.find(comment => {
+            return comment.user.type === 'Bot' && comment.body.includes('ECS Check Repo Config')
+          });
+
+          const output = 
+          `#### ECS Check Repo Config FAILED!!!
+           Ensure that the repository variables below are set in this project:
+           - ECS_CLUSTER: ECS Cluster Name (check with devops team if unsure)
+           - ECS_SERVICE: Service name (without country and/or environment prefixes)
+          `;
+
+          // 3. Delete previous comment so PR timeline makes sense
+          if (botComment) {
+            github.rest.issues.deleteComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: botComment.id,
+            });
+          }
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: output
+          });

@@ -13,10 +13,7 @@ inputs:
   tf-cfg-directory:
     required: false
     description: "Folder inside the project to find the Terraform Configuration"
-    default: "terraform"
-  revision:
-    required: true
-    description: "Revision (branch or tag) to use"
+    default: "${{github.action_path}}"
   message:
     required: true
     description: "Reason for the terraform plan to run"
@@ -45,7 +42,6 @@ runs:
       env:
         TF_CLOUD_ORGANIZATION: ${{ inputs.tfc-organization }}
         TF_API_TOKEN: "${{ inputs.tfc-token }}"
-        TF_VAR_revision: "\"${{ inputs.revision }}\""
       with:
         workspace: ${{ inputs.tfc-workspace }}
         configuration_version: ${{ steps.plan-upload.outputs.configuration_version_id }}
@@ -71,11 +67,11 @@ runs:
             issue_number: context.issue.number,
           });
           const botComment = comments.find(comment => {
-            return comment.user.type === 'Bot' && comment.body.includes('Terraform Cloud Plan Output')
+            return comment.user.type === 'Bot' && comment.body.includes('Terraform Cloud Infra Plan Output')
           });
 
           const output = 
-          `#### Terraform Cloud Plan Output
+          `#### Terraform Cloud Infra Plan Output
           ${{ steps.plan-output.outputs.planOutput }}`;
 
           // 3. Delete previous comment so PR timeline makes sense
