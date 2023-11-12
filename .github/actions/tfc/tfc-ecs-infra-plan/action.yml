@@ -10,10 +10,9 @@ inputs:
   tfc-workspace:
     required: true
     description: "Workspace in Terraform Cloud to use"
-  tf-cfg-directory:
-    required: false
+  tfc-cfg-directory:
+    required: true
     description: "Folder inside the project to find the Terraform Configuration"
-    default: "${{github.action_path}}"
   message:
     required: true
     description: "Reason for the terraform plan to run"
@@ -32,7 +31,7 @@ runs:
         TF_API_TOKEN: "${{ inputs.tfc-token }}"
       with:
           workspace: ${{ inputs.tfc-workspace }}
-          directory: ${{ inputs.tf-cfg-directory }}
+          directory: ${{ inputs.tfc-cfg-directory }}
           speculative: true
 
 
