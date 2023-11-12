@@ -10,6 +10,8 @@ inputs:
   tfc-workspace:
     required: true
     description: "Workspace in Terraform Cloud to use"
+  serviceName:
+    required: true
   message:
     required: true
     description: "Reason for the terraform plan to run"
@@ -38,6 +40,7 @@ runs:
       env:
         TF_CLOUD_ORGANIZATION: ${{ inputs.tfc-organization }}
         TF_API_TOKEN: "${{ inputs.tfc-token }}"
+        TF_VAR_serviceName: "\"${{ inputs.serviceName }}\""
       with:
         workspace: ${{ inputs.tfc-workspace }}
         configuration_version: ${{ steps.plan-upload.outputs.configuration_version_id }}

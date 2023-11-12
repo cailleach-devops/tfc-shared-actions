@@ -62,6 +62,7 @@ jobs:
         tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
         tfc-token: "${{ secrets.tfc-token }}"
         tfc-workspace: "${{github.event.repository.name}}-app-${{ env.environment_name }}"
+        serviceName: ${{ vars.ECS_SERVICE }}
         message: "${{ github.event.pull_request.title }}"
 
   terraform-infra-plan:
@@ -79,6 +80,8 @@ jobs:
         tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
         tfc-token: "${{ secrets.tfc-token }}"
         tfc-workspace: "${{github.event.repository.name}}-infra-${{ env.environment_name }}"
+        clusterName: ${{ vars.ECS_CLUSTER }}
+        serviceName: ${{ vars.ECS_SERVICE }}
         message: "${{ github.event.pull_request.title }}"
 
 
