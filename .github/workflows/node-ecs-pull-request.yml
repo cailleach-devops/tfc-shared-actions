@@ -35,8 +35,8 @@ jobs:
 
   create-dev-role:
     runs-on: ubuntu-latest
-    depends_on: [ check-repo-config ]
-    
+    needs: [ check-repo-config ]
+
     steps:    
     - name: "Create DEV Role"
       uses: CailleachOrg/tfc-shared-actions/.github/actions/aws/aws-create-role@main
@@ -50,7 +50,7 @@ jobs:
 
   terraform-app-plan:
     runs-on: ubuntu-latest
-    depends_on: [ create-dev-role ]
+    needs: [ create-dev-role ]
 
     steps:
     - id: checkout
@@ -67,7 +67,7 @@ jobs:
 
   terraform-infra-plan:
     runs-on: ubuntu-latest
-    depends_on: [ create-dev-role ]
+    needs: [ create-dev-role ]
 
     steps:
     - id: checkout
