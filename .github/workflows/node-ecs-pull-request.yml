@@ -12,7 +12,6 @@ on:
     secrets:
       tfc-token:
         required: true
-        type: string
 
 env:
   environment_name: 'dev'
