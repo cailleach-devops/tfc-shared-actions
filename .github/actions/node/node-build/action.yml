@@ -12,7 +12,9 @@ runs:
         node-version: ${{ inputs.node-version }}
 
     - name: Install dependencies
+      shell: bash
       run: npm install
 
     - name: Test
+      shell: bash
       run: npm run test

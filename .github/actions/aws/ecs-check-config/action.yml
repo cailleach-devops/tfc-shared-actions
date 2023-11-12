@@ -10,7 +10,7 @@ runs:
   using: "composite"
   steps:
     - name: Update PR
-      if: ${{ (ecs-cluster == '') || (ecs-service == '') }}
+      if: ${{ (inputs.ecs-cluster == '') || (inputs.ecs-service == '') }}
       uses: actions/github-script@v6
       with:
         script: |
