@@ -9,7 +9,6 @@ inputs:
     required: true
   service-type:
     required: true
-    default: "ecs-tasks"
   region:
     required: true
   role:
