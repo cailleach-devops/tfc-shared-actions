@@ -36,6 +36,8 @@ jobs:
   create-dev-role:
     runs-on: ubuntu-latest
     depends_on: [ check-repo-config ]
+    
+    steps:    
     - name: "Create DEV Role"
       uses: CailleachOrg/tfc-shared-actions/.github/actions/aws/aws-create-role@main
       with:
