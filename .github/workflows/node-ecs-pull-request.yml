@@ -9,6 +9,10 @@ on:
       aws-role:
         required: true
         type: string
+    secrets:
+      tfc-token:
+        required: true
+        type: string
 
 env:
   environment_name: 'dev'
@@ -57,7 +61,7 @@ jobs:
       uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-app-plan@new-pipe
       with:
         tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
-        tfc-token: "${{ secrets.TFC_TOKEN }}"
+        tfc-token: "${{ secrets.tfc-token }}"
         tfc-workspace: "${{github.event.repository.name}}-app-${{ env.environment_name }}"
         message: "${{ github.event.pull_request.title }}"
 
@@ -74,7 +78,7 @@ jobs:
       uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-ecs-infra-plan@new-pipe
       with:
         tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
-        tfc-token: "${{ secrets.TFC_TOKEN }}"
+        tfc-token: "${{ secrets.tfc-token }}"
         tfc-workspace: "${{github.event.repository.name}}-infra-${{ env.environment_name }}"
         message: "${{ github.event.pull_request.title }}"
 
