@@ -27,7 +27,7 @@ jobs:
       uses: actions/checkout@v4
       
     - name: "CheckConfig"
-      uses: CailleachOrg/tfc-shared-actions/.github/actions/aws/ecs-check-config@min
+      uses: CailleachOrg/tfc-shared-actions/.github/actions/aws/ecs-check-config@main
       with:
         ecs-cluster: "${{ vars.ECS_CLUSTER }}"
         ecs-service: "${{ vars.ECS_SERVICE }}"
