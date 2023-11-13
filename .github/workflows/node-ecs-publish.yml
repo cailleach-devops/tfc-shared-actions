@@ -55,7 +55,7 @@ jobs:
         tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
         tfc-token: "${{ secrets.TFC_TOKEN }}"
         tfc-workspace: "${{github.event.repository.name}}-app-${{ inputs.environment_name }}"
-        tfc-cfg-directory: 'terraform'
+        tfc-cfg-directory: 'terraform/app'
         clusterName: "${{ vars.ECS_CLUSTER }}"
         serviceName: "${{ vars.ECS_SERVICE }}"
         revision: ${{ inputs.revision }}
@@ -113,12 +113,12 @@ jobs:
       uses: actions/checkout@v4
 
     - name: "Terraform Infra Apply"
-      uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-ecs-infra-apply@main
+      uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-apply@main
       with:
         tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
         tfc-token: "${{ secrets.TFC_TOKEN }}"
         tfc-workspace: "${{github.event.repository.name}}-infra-${{ inputs.environment_name }}"
-        tfc-cfg-directory: 'infra/terraform'
+        tfc-cfg-directory: 'terraform/infra'
         clusterName: "${{ vars.ECS_CLUSTER }}"
         serviceName: "${{ vars.ECS_SERVICE }}"
         revision: ${{ inputs.revision }}
