@@ -19,23 +19,12 @@ runs:
             repo: context.repo.repo,
             issue_number: context.issue.number,
           });
+
           const botComment = comments.find(comment => {
             return comment.user.type === 'Bot' && comment.body.includes('ECS Check Repo Config')
           });
 
-          if (${{ (inputs.ecs-cluster == '') || (inputs.ecs-service == '') }}) {
-            const output = 
-          `#### ECS Check Repo Config FAILED!!!
-           Ensure that the repository variables below are set in this project:
-           - ECS_CLUSTER: ECS Cluster Name (check with devops team if unsure)
-           - ECS_SERVICE: Service name (without country and/or environment prefixes)
-          `;
-          } else {
-            const output = 
-          `#### ECS Check Repo Config SUCCEDED!!! `
-          }
-
-          // 3. Delete previous comment so PR timeline makes sense
+          // 2. Delete previous comment
           if (botComment) {
             github.rest.issues.deleteComment({
               owner: context.repo.owner,
@@ -43,6 +32,21 @@ runs:
               comment_id: botComment.id,
             });
           }
+
+          var output = ''
+
+          if (${{ (inputs.ecs-cluster == '') || (inputs.ecs-service == '') }}) {
+            output = 
+          `#### ECS Check Repo Config FAILED!!!
+           Ensure that the repository variables below are set in this project:
+           - ECS_CLUSTER: ECS Cluster Name (check with devops team if unsure)
+           - ECS_SERVICE: Service name (without country and/or environment prefixes)
+          `;
+          } else {
+            output = 
+          `#### ECS Check Repo Config SUCCEDED!!! `
+          }
+
           github.rest.issues.createComment({
             issue_number: context.issue.number,
             owner: context.repo.owner,
