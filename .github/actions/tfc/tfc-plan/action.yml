@@ -12,6 +12,8 @@ inputs:
     description: "Workspace in Terraform Cloud to use"
   tfc-cfg-directory:
     required: true
+  scriptOrigin:
+    required: true
   clusterName:
     required: true
   serviceName:
@@ -73,11 +75,11 @@ runs:
             issue_number: context.issue.number,
           });
           const botComment = comments.find(comment => {
-            return comment.user.type === 'Bot' && comment.body.includes('Terraform Cloud App Plan Output')
+            return comment.user.type === 'Bot' && comment.body.includes('Terraform Cloud ${{inputs.scriptOrigin}} Output')
           });
 
           const output = 
-          `#### Terraform Cloud App Plan Output
+          `#### Terraform Cloud ${{inputs.scriptOrigin}} Output
           ${{ steps.plan-output.outputs.planOutput }}`;
 
           // 3. Delete previous comment so PR timeline makes sense

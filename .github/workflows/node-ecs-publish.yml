@@ -30,6 +30,7 @@ jobs:
 
   create-role:
     runs-on: ubuntu-latest
+    steps:
     - name: "Create ${{ inputs.environment_name }} Role"
       uses: CailleachOrg/tfc-shared-actions/.github/actions/aws/aws-create-role@main
       with:
