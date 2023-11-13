@@ -45,3 +45,7 @@ runs:
             repo: context.repo.repo,
             body: output
           });
+    - name: Fail the action
+      if: ${{ (inputs.ecs-cluster == '') || (inputs.ecs-service == '') }}
+      shell: bash
+      run: exit 1
