@@ -63,7 +63,7 @@ jobs:
         tfc-token: "${{ secrets.tfc-token }}"
         tfc-workspace: "${{github.event.repository.name}}-app-${{ env.environment_name }}"
         tfc-cfg-directory: 'terraform/app'
-        scriptOrigin: '*Application*'
+        scriptOrigin: '**Application**'
         clusterName: "${{ vars.ECS_CLUSTER }}"
         serviceName: "${{ vars.ECS_SERVICE }}"
         message: "${{ github.event.pull_request.title }}"
@@ -84,7 +84,7 @@ jobs:
         tfc-token: "${{ secrets.tfc-token }}"
         tfc-workspace: "${{github.event.repository.name}}-infra-${{ env.environment_name }}"
         tfc-cfg-directory: 'terraform/infra'
-        scriptOrigin: '*Infrastructure*'
+        scriptOrigin: '**Infrastructure**'
         clusterName: "${{ vars.ECS_CLUSTER }}"
         serviceName: "${{ vars.ECS_SERVICE }}"
         message: "${{ github.event.pull_request.title }}"
