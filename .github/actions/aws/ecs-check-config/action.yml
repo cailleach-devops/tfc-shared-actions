@@ -10,7 +10,6 @@ runs:
   using: "composite"
   steps:
     - name: Update PR if absent
-      if: ${{ (inputs.ecs-cluster == '') || (inputs.ecs-service == '') }}
       uses: actions/github-script@v6
       with:
         script: |
@@ -24,12 +23,17 @@ runs:
             return comment.user.type === 'Bot' && comment.body.includes('ECS Check Repo Config')
           });
 
-          const output = 
+          if (${{ (inputs.ecs-cluster == '') || (inputs.ecs-service == '') }}) {
+            const output = 
           `#### ECS Check Repo Config FAILED!!!
            Ensure that the repository variables below are set in this project:
            - ECS_CLUSTER: ECS Cluster Name (check with devops team if unsure)
            - ECS_SERVICE: Service name (without country and/or environment prefixes)
           `;
+          } else {
+            const output = 
+          `#### ECS Check Repo Config SUCCEDED!!! `
+          }
 
           // 3. Delete previous comment so PR timeline makes sense
           if (botComment) {
@@ -45,30 +49,6 @@ runs:
             repo: context.repo.repo,
             body: output
           });
-
-    - name: Update PR if absent
-      if: ${{ (inputs.ecs-cluster <> '') && (inputs.ecs-service <> '') }}
-      uses: actions/github-script@v6
-      with:
-        script: |
-          // 1. Retrieve existing bot comments for the PR
-          const { data: comments } = await github.rest.issues.listComments({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            issue_number: context.issue.number,
-          });
-          const botComment = comments.find(comment => {
-            return comment.user.type === 'Bot' && comment.body.includes('ECS Check Repo Config')
-          });
-
-          // 2. Delete previous comment
-          if (botComment) {
-            github.rest.issues.deleteComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              comment_id: botComment.id,
-            });
-          }
 
     - name: Fail the action
       if: ${{ (inputs.ecs-cluster == '') || (inputs.ecs-service == '') }}
