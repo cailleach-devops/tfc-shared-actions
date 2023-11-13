@@ -28,6 +28,10 @@ runs:
         role-to-assume: ${{ inputs.aws-role }}
         aws-region: ${{ inputs.aws-region }}      
 
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
     - name: buildAndUnityTest
       uses: CailleachOrg/tfc-shared-actions/.github/actions/node/node-build@main
       with:
@@ -35,8 +39,8 @@ runs:
 
     - name: Docker build
       shell: bash
-      run: docker build . -t ${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{inputs.service-name}}:${{ inputs.revision }}
+      run: docker build -t ${{ steps.login-ecr.outputs.registry }}/${{inputs.service-name}}:${{ inputs.revision }} .
 
     - name: Docker push
       shell: bash
-      run: docker push ${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{github.event.repository.name}}:${{ inputs.revision }}
+      run: docker push ${{ steps.login-ecr.outputs.registry }}/${{inputs.service-name}}:${{ inputs.revision }}
