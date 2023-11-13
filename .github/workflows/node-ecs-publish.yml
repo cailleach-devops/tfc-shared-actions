@@ -18,6 +18,9 @@ on:
       revision:
         required: true
         type: string
+    secrets:
+      tfc-token:
+        required: true
 
 env:
   SERVICE_TYPE: 'ecs-tasks'
