@@ -57,7 +57,7 @@ jobs:
       uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-apply@main
       with:
         tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
-        tfc-token: "${{ inputs.tfc-token }}"
+        tfc-token: "${{ secrets.tfc-token }}"
         tfc-workspace: "${{github.event.repository.name}}-app-${{ inputs.environment_name }}"
         tfc-cfg-directory: 'terraform/app'
         clusterName: "${{ vars.ECS_CLUSTER }}"
@@ -121,7 +121,7 @@ jobs:
       uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-apply@main
       with:
         tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
-        tfc-token: "${{ inputs.tfc-token }}"
+        tfc-token: "${{ secrets.tfc-token }}"
         tfc-workspace: "${{github.event.repository.name}}-infra-${{ inputs.environment_name }}"
         tfc-cfg-directory: 'terraform/infra'
         clusterName: "${{ vars.ECS_CLUSTER }}"
