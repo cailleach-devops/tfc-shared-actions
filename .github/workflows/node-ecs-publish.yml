@@ -43,7 +43,7 @@ jobs:
 
   terraform-app-apply:
     runs-on: ubuntu-latest
-    depends_on: [ create-role ]
+    needs: [ create-role ]
 
     steps:
     - id: checkout
@@ -76,7 +76,7 @@ jobs:
 
   database-apply:
     runs-on: ubuntu-latest
-    depends_on: [ create-role ]
+    needs: [ create-role ]
     steps:
     - id: checkout
       name: checkout
@@ -88,7 +88,7 @@ jobs:
 
   app-publish:
     runs-on: ubuntu-latest
-    depends_on: [ database-apply, terraform-app-apply, app-build]
+    needs: [ database-apply, terraform-app-apply, app-build]
 
     steps:
     - id: checkout
@@ -106,7 +106,7 @@ jobs:
 
   infra-publish:
     runs-on: ubuntu-latest
-    depends_on: [ database-apply, terraform-app-apply, app-build]
+    needs: [ database-apply, terraform-app-apply, app-build]
 
     steps:
     - id: checkout
@@ -128,7 +128,7 @@ jobs:
 
   app-rollout:
     runs-on: ubuntu-latest
-    depends_on: [ app-publish, infra-publish]
+    needs: [ app-publish, infra-publish]
 
     steps:
     - name: Wait for Finish
