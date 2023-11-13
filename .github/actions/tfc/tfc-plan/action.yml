@@ -10,7 +10,7 @@ inputs:
   tfc-workspace:
     required: true
     description: "Workspace in Terraform Cloud to use"
-  serviceName:
+  tfc-cfg-directory:
     required: true
   message:
     required: true
@@ -30,7 +30,7 @@ runs:
         TF_API_TOKEN: "${{ inputs.tfc-token }}"
       with:
         workspace: ${{ inputs.tfc-workspace }}
-        directory: "terraform"
+        directory: ${{ inputs.tfc-cfg-directory }}
         speculative: true
 
 
@@ -40,7 +40,10 @@ runs:
       env:
         TF_CLOUD_ORGANIZATION: ${{ inputs.tfc-organization }}
         TF_API_TOKEN: "${{ inputs.tfc-token }}"
-        TF_VAR_serviceName: "\"${{ inputs.serviceName }}\""
+        TF_VAR_clusterName: "\"${{ vars.ECS_CLUSTER }}\""
+        TF_VAR_serviceName: "\"${{ vars.ECS_SERVICE }}\""
+        TF_VAR_revision: "\"latest\""
+
       with:
         workspace: ${{ inputs.tfc-workspace }}
         configuration_version: ${{ steps.plan-upload.outputs.configuration_version_id }}

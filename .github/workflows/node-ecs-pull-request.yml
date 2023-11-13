@@ -57,12 +57,12 @@ jobs:
       uses: actions/checkout@v4
       
     - name: "Terraform App Plan"
-      uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-app-plan@new-pipe
+      uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-plan@new-pipe
       with:
         tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
         tfc-token: "${{ secrets.tfc-token }}"
         tfc-workspace: "${{github.event.repository.name}}-app-${{ env.environment_name }}"
-        serviceName: ${{ vars.ECS_SERVICE }}
+        tfc-cfg-directory: 'terraform'
         message: "${{ github.event.pull_request.title }}"
 
   terraform-infra-plan:
@@ -75,13 +75,12 @@ jobs:
       uses: actions/checkout@v4
       
     - name: "Terraform Infra Plan"
-      uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-ecs-infra-plan@new-pipe
+      uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-plan@new-pipe
       with:
         tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
         tfc-token: "${{ secrets.tfc-token }}"
         tfc-workspace: "${{github.event.repository.name}}-infra-${{ env.environment_name }}"
-        clusterName: ${{ vars.ECS_CLUSTER }}
-        serviceName: ${{ vars.ECS_SERVICE }}
+        tfc-cfg-directory: 'infra/terraform'
         message: "${{ github.event.pull_request.title }}"
 
 
