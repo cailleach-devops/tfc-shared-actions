@@ -69,7 +69,7 @@ jobs:
 
   terraform-infra-plan:
     runs-on: ubuntu-latest
-    needs: [ create-dev-role ]
+    needs: [ create-dev-role, terraform-app-plan ]
 
     steps:
     - id: checkout
@@ -84,7 +84,7 @@ jobs:
         tfc-workspace: "${{github.event.repository.name}}-infra-${{ env.environment_name }}"
         tfc-cfg-directory: 'infra/terraform'
         clusterName: "${{ vars.ECS_CLUSTER }}"
-        serviceName: "${{ vars.ECS_SERVICE }}"        
+        serviceName: "${{ vars.ECS_SERVICE }}"
         message: "${{ github.event.pull_request.title }}"
 
 
