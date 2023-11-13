@@ -22,10 +22,12 @@ runs:
     - name: buildAndUnityTest
       uses: CailleachOrg/tfc-shared-actions/.github/actions/node-build@main
       with:
-        node-version: '20.x'
+        node-version: ${{ inputs.node-version }}
 
     - name: Docker build
+      shell: bash
       run: docker build . -t ${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{inputs.service-name}}:${{ inputs.revision }}
 
     - name: Docker push
+      shell: bash
       run: docker push ${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{github.event.repository.name}}:${{ inputs.revision }}
