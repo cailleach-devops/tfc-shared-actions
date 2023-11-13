@@ -12,6 +12,10 @@ inputs:
     description: "Workspace in Terraform Cloud to use"
   tfc-cfg-directory:
     required: true
+  clusterName:
+    required: true
+  serviceName:
+    required: true
   message:
     required: true
     description: "Reason for the terraform plan to run"
@@ -40,8 +44,8 @@ runs:
       env:
         TF_CLOUD_ORGANIZATION: ${{ inputs.tfc-organization }}
         TF_API_TOKEN: "${{ inputs.tfc-token }}"
-        TF_VAR_clusterName: "\"${{ vars.ECS_CLUSTER }}\""
-        TF_VAR_serviceName: "\"${{ vars.ECS_SERVICE }}\""
+        TF_VAR_clusterName: "\"${{ inputs.clusterName }}\""
+        TF_VAR_serviceName: "\"${{ inputs.serviceName }}\""
         TF_VAR_revision: "\"latest\""
 
       with:
