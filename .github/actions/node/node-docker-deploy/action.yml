@@ -20,7 +20,7 @@ runs:
       uses: actions/checkout@v4
 
     - name: buildAndUnityTest
-      uses: CailleachOrg/tfc-shared-actions/.github/actions/node-build@main
+      uses: CailleachOrg/tfc-shared-actions/.github/actions/node/node-build@main
       with:
         node-version: ${{ inputs.node-version }}
 
