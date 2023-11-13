@@ -1,0 +1,20 @@
+name: 'Node Build and Test'
+inputs:
+  node-version:
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: SetUp Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Install dependencies
+      shell: bash
+      run: npm install
+
+    - name: Test
+      shell: bash
+      run: npm run test

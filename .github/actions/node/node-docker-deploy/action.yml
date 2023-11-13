@@ -1,0 +1,31 @@
+name: 'Node Build, Package, Publish'
+inputs:
+  node-version:
+    required: true
+  service-name:
+    required: true
+  revision:
+    required: true
+  aws-account-id:
+    required: true
+  aws-region:
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+
+    - id: checkout
+      name: checkout
+      uses: actions/checkout@v4
+
+    - name: buildAndUnityTest
+      uses: CailleachOrg/tfc-shared-actions/.github/actions/node-build@main
+      with:
+        node-version: '20.x'
+
+    - name: Docker build
+      run: docker build . -t ${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{inputs.service-name}}:${{ inputs.revision }}
+
+    - name: Docker push
+      run: docker push ${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{github.event.repository.name}}:${{ inputs.revision }}

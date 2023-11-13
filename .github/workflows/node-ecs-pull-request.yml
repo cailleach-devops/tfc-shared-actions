@@ -1,0 +1,101 @@
+name: 'NodePullRequest'
+
+on:  
+  workflow_call:
+    inputs:
+      aws-region:
+        required: true
+        type: string
+      aws-role:
+        required: true
+        type: string
+    secrets:
+      tfc-token:
+        required: true
+
+env:
+  environment_name: 'dev'
+  SERVICE_TYPE: 'ecs-tasks'
+
+jobs:
+  check-repo-config:
+    runs-on: ubuntu-latest
+
+    steps:
+    - id: checkout
+      name: checkout
+      uses: actions/checkout@v4
+      
+    - name: "CheckConfig"
+      uses: CailleachOrg/tfc-shared-actions/.github/actions/aws/ecs-check-config@new-pipe
+      with:
+        ecs-cluster: "${{ vars.ECS_CLUSTER }}"
+        ecs-service: "${{ vars.ECS_SERVICE }}"
+
+  create-dev-role:
+    runs-on: ubuntu-latest
+    needs: [ check-repo-config ]
+
+    steps:    
+    - name: "Create DEV Role"
+      uses: CailleachOrg/tfc-shared-actions/.github/actions/aws/aws-create-role@new-pipe
+      with:
+        country: ${{ vars.COUNTRY }}
+        region: ${{ inputs.aws-region }}
+        role: ${{ inputs.aws-role }}
+        environment: ${{ env.environment_name }}
+        service-name: ${{ vars.ECS_SERVICE }}
+        service-type: ${{ env.SERVICE_TYPE }}
+
+  terraform-app-plan:
+    runs-on: ubuntu-latest
+    needs: [ create-dev-role ]
+
+    steps:
+    - id: checkout
+      name: checkout
+      uses: actions/checkout@v4
+      
+    - name: "Terraform App Plan"
+      uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-plan@new-pipe
+      with:
+        tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
+        tfc-token: "${{ secrets.tfc-token }}"
+        tfc-workspace: "${{github.event.repository.name}}-app-${{ env.environment_name }}"
+        tfc-cfg-directory: 'terraform'
+        clusterName: "${{ vars.ECS_CLUSTER }}"
+        serviceName: "${{ vars.ECS_SERVICE }}"
+        message: "${{ github.event.pull_request.title }}"
+
+  terraform-infra-plan:
+    runs-on: ubuntu-latest
+    needs: [ create-dev-role, terraform-app-plan ]
+
+    steps:
+    - id: checkout
+      name: checkout
+      uses: actions/checkout@v4
+      
+    - name: "Terraform Infra Plan"
+      uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-plan@new-pipe
+      with:
+        tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
+        tfc-token: "${{ secrets.tfc-token }}"
+        tfc-workspace: "${{github.event.repository.name}}-infra-${{ env.environment_name }}"
+        tfc-cfg-directory: 'infra/terraform'
+        clusterName: "${{ vars.ECS_CLUSTER }}"
+        serviceName: "${{ vars.ECS_SERVICE }}"
+        message: "${{ github.event.pull_request.title }}"
+
+
+  app-build:
+    runs-on: ubuntu-latest
+    steps:
+    - id: checkout
+      name: checkout
+      uses: actions/checkout@v4
+
+    - name: buildAndUnityTest
+      uses: CailleachOrg/tfc-shared-actions/.github/actions/node/node-build@new-pipe
+      with:
+        node-version: '20.x'
