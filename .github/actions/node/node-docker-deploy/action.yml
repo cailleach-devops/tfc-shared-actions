@@ -6,8 +6,6 @@ inputs:
     required: true
   revision:
     required: true
-  aws-account-id:
-    required: true
   aws-region:
     required: true
   aws-role:

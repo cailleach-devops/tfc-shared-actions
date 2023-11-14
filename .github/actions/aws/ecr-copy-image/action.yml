@@ -1,19 +1,15 @@
 name: 'ECR Copy Image'
 description: ""
 inputs:
-  from-access_key_id:
-    required: true
-  from-secret_access_key:
+  from-role:
     required: true
   from-region:
     required: true
-  to-access_key_id:
-    required: true
-  to-secret_access_key:
+  to-role:
     required: true
   to-region:
     required: true
-  repo:
+  service-name:
     required: true
   tag:
     required: true
@@ -22,21 +18,37 @@ runs:
   using: "composite"
   steps:
 
-    - name: Pull from ECR
-      uses: jwalton/gh-ecr-push@v1
+    - name: configure aws credentials
+      uses: aws-actions/configure-aws-credentials@v4
       with:
-        access-key-id: ${{ inputs.from-access_key_id }}
-        secret-access-key: ${{ inputs.from-secret_access_key }}
-        region: ${{inputs.from-region}}
-        image: ${{inputs.repo}}:${{ inputs.tag}}
-        local-image: temp-image
-        direction: pull
+        role-to-assume: ${{ inputs.from-aws-role }}
+        aws-region: ${{ inputs.from-aws-region }}      
 
-    - name: Push to ECR
-      uses: jwalton/gh-ecr-push@v1
+    - name: Login to Origin Amazon ECR
+      id: login-origin-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Pull from origin ECR
+      shell: bash
+      run: docker pull ${{ steps.login-origin-ecr.outputs.registry }}/${{inputs.service-name}}:${{ inputs.tag }}
+
+    - name: configure aws credentials
+      uses: aws-actions/configure-aws-credentials@v4
       with:
-        access-key-id: ${{ inputs.to-access_key_id }}
-        secret-access-key: ${{ inputs.to-secret_access_key }}
-        region: ${{inputs.to-region}}
-        image: ${{inputs.repo}}:${{ inputs.tag}}
-        local-image: temp-image
+        role-to-assume: ${{ inputs.to-aws-role }}
+        aws-region: ${{ inputs.to-aws-region }}      
+
+    - name: Login to Target Amazon ECR
+      id: login-target-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Check if image exist in target
+      id: check-image
+      shell: bash
+      run: aws ecr list-images --repository-name ${{ steps.login-target-ecr.outputs.registry }}/${{inputs.service-name}}:${{ inputs.tag }} 
+
+    - name: Push to target ECR
+      shell: bash
+      run: |
+        docker tag ${{ steps.login-origin-ecr.outputs.registry }}/${{inputs.service-name}}:${{ inputs.tag }}  ${{ steps.login-target-ecr.outputs.registry }}/${{inputs.service-name}}:${{ inputs.tag }} 
+        docker push ${{ steps.login-target-ecr.outputs.registry }}/${{inputs.service-name}}:${{ inputs.tag }} 
