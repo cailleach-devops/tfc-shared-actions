@@ -46,7 +46,7 @@ runs:
       continue-on-error: true
       id: check-image
       shell: bash
-      run: aws ecr list-images --repository-name ${{ steps.login-target-ecr.outputs.registry }}/${{inputs.service-name}}:${{ inputs.tag }} 
+      run: aws ecr describe-images --repository-name ${{ steps.login-target-ecr.outputs.registry }} imageIds imageTag=${{ inputs.tag }} 
 
     - name: Push to target ECR
       if: steps.check-image.outcome == 'failure'
