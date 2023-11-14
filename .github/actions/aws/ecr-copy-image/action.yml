@@ -43,11 +43,13 @@ runs:
       uses: aws-actions/amazon-ecr-login@v2
 
     - name: Check if image exist in target
+      continue-on-error: true
       id: check-image
       shell: bash
       run: aws ecr list-images --repository-name ${{ steps.login-target-ecr.outputs.registry }}/${{inputs.service-name}}:${{ inputs.tag }} 
 
     - name: Push to target ECR
+      if: steps.check-image.outcome == 'failure'
       shell: bash
       run: |
         docker tag ${{ steps.login-origin-ecr.outputs.registry }}/${{inputs.service-name}}:${{ inputs.tag }}  ${{ steps.login-target-ecr.outputs.registry }}/${{inputs.service-name}}:${{ inputs.tag }} 
