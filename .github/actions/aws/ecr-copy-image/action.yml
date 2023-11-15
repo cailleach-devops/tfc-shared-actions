@@ -1,17 +1,17 @@
 name: 'ECR Copy Image'
 description: ""
 inputs:
-  from-role:
+  from-aws-role:
     required: true
-  from-region:
+  from-aws-region:
     required: true
-  to-role:
+  to-aws-role:
     required: true
-  to-region:
+  to-aws-region:
     required: true
   service-name:
     required: true
-  tag:
+  revision:
     required: true
 
 runs:
@@ -30,7 +30,7 @@ runs:
 
     - name: Pull from origin ECR
       shell: bash
-      run: docker pull ${{ steps.login-origin-ecr.outputs.registry }}/${{inputs.service-name}}:${{ inputs.tag }}
+      run: docker pull ${{ steps.login-origin-ecr.outputs.registry }}/${{inputs.service-name}}:${{ inputs.revision }}
 
     - name: configure aws credentials
       uses: aws-actions/configure-aws-credentials@v4
@@ -46,11 +46,11 @@ runs:
       continue-on-error: true
       id: check-image
       shell: bash
-      run: aws ecr describe-images --repository-name ${{ steps.login-target-ecr.outputs.registry }} imageIds imageTag=${{ inputs.tag }} 
+      run: aws ecr describe-images --repository-name ${{ steps.login-target-ecr.outputs.registry }} imageIds imageTag=${{ inputs.revision }} 
 
     - name: Push to target ECR
       if: steps.check-image.outcome == 'failure'
       shell: bash
       run: |
-        docker tag ${{ steps.login-origin-ecr.outputs.registry }}/${{inputs.service-name}}:${{ inputs.tag }}  ${{ steps.login-target-ecr.outputs.registry }}/${{inputs.service-name}}:${{ inputs.tag }} 
-        docker push ${{ steps.login-target-ecr.outputs.registry }}/${{inputs.service-name}}:${{ inputs.tag }} 
+        docker tag ${{ steps.login-origin-ecr.outputs.registry }}/${{inputs.service-name}}:${{ inputs.revision }}  ${{ steps.login-target-ecr.outputs.registry }}/${{inputs.service-name}}:${{ inputs.revision }} 
+        docker push ${{ steps.login-target-ecr.outputs.registry }}/${{inputs.service-name}}:${{ inputs.revision }} 
