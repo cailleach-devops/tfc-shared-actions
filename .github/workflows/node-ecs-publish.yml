@@ -29,6 +29,7 @@ permissions:
 jobs:
 
   create-role:
+    environment: dev
     runs-on: ubuntu-latest
     steps:
     - name: "Create ${{ inputs.environment_name }} Role"
