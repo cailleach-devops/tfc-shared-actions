@@ -37,7 +37,7 @@ runs:
 
     - name: checkRevisionMarker
       shell: bash
-      run |
+      run: |
         echo "Checking..."
         cat ./src/changelog.html
         cat ./src/version.txt
