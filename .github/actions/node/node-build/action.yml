@@ -26,7 +26,7 @@ runs:
         sed -i 's/__REF_TYPE__/${{github.ref_type}}/g' ./src/changelog.html
         sed -i 's/__REF_NAME__/${{github.ref_name}}/g' ./src/changelog.html
         sed -i 's/__LAST_COMMIT__/${{github.sha}}/g' ./src/changelog.html
-        sed -i 's/__BUILD_DATE__/${{github.sha}}/g' ./src/changelog.html
+        sed -i 's/__BUILD_DATE__/${{ github.event.repository.updated_at}}/g' ./src/changelog.html
 
         echo ${{github.sha}} > ./src/version.txt
 
