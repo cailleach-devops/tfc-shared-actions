@@ -62,6 +62,7 @@ jobs:
         serviceName: "${{ vars.ECS_SERVICE }}"
         revision: ${{ inputs.revision }}
         message: "GitHub Push in Main Branch"
+        country: ${{ vars.COUNTRY }}
         aws-region: "${{ inputs.aws-region }}"
         environment-name: ${{ env.environment_name }}
 
@@ -128,6 +129,9 @@ jobs:
         serviceName: "${{ vars.ECS_SERVICE }}"
         revision: ${{ inputs.revision }}
         message: "GitHub Push in Main Branch"
+        country: ${{ vars.COUNTRY }}
+        aws-region: "${{ inputs.aws-region }}"
+        environment-name: ${{ env.environment_name }}
 
 
   app-rollout:
