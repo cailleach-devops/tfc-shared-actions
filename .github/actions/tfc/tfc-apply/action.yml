@@ -56,7 +56,7 @@ runs:
         TF_VAR_revision: "\"${{ inputs.revision }}\""
         TF_VAR_country: "\"${{ inputs.country }}\""
         TF_VAR_environment: "\"${{ inputs.environment-name }}\""
-        TF_VAR_AWS_REGION: "\"${{ inputs.aws-region }}\""
+        AWS_REGION: "\"${{ inputs.aws-region }}\""
       with:
         workspace: ${{ inputs.tfc-workspace }}
         configuration_version: ${{ steps.apply-upload.outputs.configuration_version_id }}
