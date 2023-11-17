@@ -3,7 +3,7 @@ name: 'OnPublishECS'
 on:  
   workflow_call:
     inputs:
-      environment_name:
+      environment-name:
         required: true
         type: string
       aws-region:
@@ -38,7 +38,7 @@ jobs:
         country: ${{ vars.COUNTRY }}
         region: ${{ inputs.aws-region }}
         role: ${{ inputs.aws-role }}
-        environment: ${{ inputs.environment_name}}
+        environment-name: ${{ inputs.environment-name}}
         service-name: ${{ vars.ECS_SERVICE }}
         service-type: ${{ env.SERVICE_TYPE }}
 
