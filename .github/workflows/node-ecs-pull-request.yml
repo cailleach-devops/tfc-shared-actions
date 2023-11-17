@@ -14,7 +14,7 @@ on:
         required: true
 
 env:
-  environment_name: 'dev'
+  environment-name: 'dev'
   SERVICE_TYPE: 'ecs-tasks'
 
 jobs:
@@ -43,7 +43,7 @@ jobs:
         country: ${{ vars.COUNTRY }}
         region: ${{ inputs.aws-region }}
         role: ${{ inputs.aws-role }}
-        environment: ${{ env.environment_name }}
+        environment: ${{ env.environment-name }}
         service-name: ${{ vars.ECS_SERVICE }}
         service-type: ${{ env.SERVICE_TYPE }}
 
@@ -61,12 +61,15 @@ jobs:
       with:
         tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
         tfc-token: "${{ secrets.tfc-token }}"
-        tfc-workspace: "${{github.event.repository.name}}-app-${{ env.environment_name }}"
+        tfc-workspace: "${{github.event.repository.name}}-app-${{ env.environment-name }}"
         tfc-cfg-directory: 'terraform/app'
         scriptOrigin: '**Application**'
         clusterName: "${{ vars.ECS_CLUSTER }}"
         serviceName: "${{ vars.ECS_SERVICE }}"
         message: "${{ github.event.pull_request.title }}"
+        country: ${{ vars.COUNTRY }}
+        aws-region: "${{ inputs.aws-region }}"
+        environment-name: ${{ env.environment-name }}
 
   terraform-infra-plan:
     runs-on: ubuntu-latest
@@ -82,14 +85,16 @@ jobs:
       with:
         tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
         tfc-token: "${{ secrets.tfc-token }}"
-        tfc-workspace: "${{github.event.repository.name}}-infra-${{ env.environment_name }}"
+        tfc-workspace: "${{github.event.repository.name}}-infra-${{ env.environment-name }}"
         tfc-cfg-directory: 'terraform/infra'
         scriptOrigin: '**Infrastructure**'
         clusterName: "${{ vars.ECS_CLUSTER }}"
         serviceName: "${{ vars.ECS_SERVICE }}"
         message: "${{ github.event.pull_request.title }}"
+        country: ${{ vars.COUNTRY }}
         aws-region: "${{ inputs.aws-region }}"
-        environment-name: ${{ env.environment_name }}
+        environment-name: ${{ env.environment-name }}
+        
 
 
   app-build:
