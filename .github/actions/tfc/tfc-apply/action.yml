@@ -54,7 +54,7 @@ runs:
         TF_VAR_clusterName: "\"${{ inputs.clusterName }}\""
         TF_VAR_serviceName: "\"${{ inputs.serviceName }}\""
         TF_VAR_revision: "\"${{ inputs.revision }}\""
-        TF_VAR_country: "\"${{ input.country }}\""
+        TF_VAR_country: "\"${{ inputs.country }}\""
         TF_VAR_environment: "\"${{ inputs.environment-name }}\""
         TF_VAR_AWS_REGION: "\"${{ inputs.aws-region }}\""
       with:
