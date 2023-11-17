@@ -36,10 +36,9 @@ runs:
     - name: Upload Configuration
       uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
       id: apply-upload
-      env:
-        TF_CLOUD_ORGANIZATION: ${{ inputs.tfc-organization }}
-        TF_API_TOKEN: "${{ inputs.tfc-token }}"
       with:
+          organization: ${{ inputs.tfc-organization }}
+          token: "${{ inputs.tfc-token }}"        
           workspace: ${{ inputs.tfc-workspace }}
           directory: ${{ inputs.tfc-cfg-directory }}
           speculative: false
@@ -49,15 +48,15 @@ runs:
       uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.4
       id: apply-run
       env:
-        TF_CLOUD_ORGANIZATION: ${{ inputs.tfc-organization }}
-        TF_API_TOKEN: "${{ inputs.tfc-token }}"
         TF_VAR_clusterName: "\"${{ inputs.clusterName }}\""
         TF_VAR_serviceName: "\"${{ inputs.serviceName }}\""
         TF_VAR_revision: "\"${{ inputs.revision }}\""
         TF_VAR_country: "\"${{ inputs.country }}\""
         TF_VAR_environment: "\"${{ inputs.environment-name }}\""
-        AWS_REGION: "\"${{ inputs.aws-region }}\""
+        TF_VAR_region: "\"${{ inputs.aws-region }}\""
       with:
+        organization: ${{ inputs.tfc-organization }}
+        token: "${{ inputs.tfc-token }}"
         workspace: ${{ inputs.tfc-workspace }}
         configuration_version: ${{ steps.apply-upload.outputs.configuration_version_id }}
         plan_only: false
