@@ -3,7 +3,7 @@ description: "Create a role for a service"
 inputs:
   country:
     required: true
-  environment:
+  environment-name:
     required: true
   service-name:
     required: true
@@ -30,7 +30,7 @@ runs:
       name: Check if role exists
       continue-on-error: true
       shell: bash
-      run: aws iam get-role --role-name ${{inputs.country}}-${{inputs.environment}}-${{inputs.service-name}}-role
+      run: aws iam get-role --role-name ${{inputs.country}}-${{inputs.environment-name}}-${{inputs.service-name}}-role
 
     - name: Create AWS IAM role
       if: steps.check-role.outcome == 'failure'
@@ -40,5 +40,5 @@ runs:
         sed -i 's/__AWS_SERVICE__/${{inputs.service-type}}/g' ${{github.action_path}}/policy.json
 
         aws iam create-role \
-          --role-name ${{inputs.country}}-${{inputs.environment}}-${{inputs.service-name}}-role \
+          --role-name ${{inputs.country}}-${{inputs.environment-name}}-${{inputs.service-name}}-role \
           --assume-role-policy-document file://${{github.action_path}}/policy.json
