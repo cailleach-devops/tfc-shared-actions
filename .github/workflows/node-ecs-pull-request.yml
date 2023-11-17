@@ -64,7 +64,6 @@ jobs:
         tfc-workspace: "${{github.event.repository.name}}-app-${{ env.environment-name }}"
         tfc-cfg-directory: 'terraform/app'
         scriptOrigin: '** Application **'
-        country: ${{ vars.COUNTRY }}
         clusterName: "${{ vars.ECS_CLUSTER }}"
         serviceName: "${{ vars.ECS_SERVICE }}"
         message: "${{ github.event.pull_request.title }}"
@@ -89,7 +88,6 @@ jobs:
         tfc-workspace: "${{github.event.repository.name}}-infra-${{ env.environment-name }}"
         tfc-cfg-directory: 'terraform/infra'
         scriptOrigin: '** Infrastructure **'
-        country: ${{ vars.COUNTRY }}
         clusterName: "${{ vars.ECS_CLUSTER }}"
         serviceName: "${{ vars.ECS_SERVICE }}"
         message: "${{ github.event.pull_request.title }}"
