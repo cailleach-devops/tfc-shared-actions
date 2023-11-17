@@ -43,7 +43,7 @@ jobs:
         country: ${{ vars.COUNTRY }}
         region: ${{ inputs.aws-region }}
         role: ${{ inputs.aws-role }}
-        environment: ${{ env.environment-name }}
+        environment-name: ${{ env.environment-name }}
         service-name: ${{ vars.ECS_SERVICE }}
         service-type: ${{ env.SERVICE_TYPE }}
 
