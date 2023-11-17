@@ -64,7 +64,7 @@ jobs:
         message: "GitHub Push in Main Branch"
         country: ${{ vars.COUNTRY }}
         aws-region: "${{ inputs.aws-region }}"
-        environment-name: ${{ env.environment-name }}
+        environment-name: ${{ inputs.environment-name }}
 
   app-build:
     runs-on: ubuntu-latest
@@ -131,7 +131,7 @@ jobs:
         message: "GitHub Push in Main Branch"
         country: ${{ vars.COUNTRY }}
         aws-region: "${{ inputs.aws-region }}"
-        environment-name: ${{ env.environment-name }}
+        environment-name: ${{ inputs.environment-name }}
 
 
   app-rollout:
