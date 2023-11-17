@@ -88,6 +88,8 @@ jobs:
         clusterName: "${{ vars.ECS_CLUSTER }}"
         serviceName: "${{ vars.ECS_SERVICE }}"
         message: "${{ github.event.pull_request.title }}"
+        aws-region: "${{ inputs.aws-region }}"
+        environment-name: ${{ env.environment_name }}
 
 
   app-build:

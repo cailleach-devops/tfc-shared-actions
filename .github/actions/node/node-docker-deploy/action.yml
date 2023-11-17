@@ -35,13 +35,6 @@ runs:
       with:
         node-version: ${{ inputs.node-version }}
 
-    - name: checkRevisionMarker
-      shell: bash
-      run: |
-        echo "Checking..."
-        cat ./src/changelog.html
-        cat ./src/version.txt
-
     - name: Docker build
       shell: bash
       run: docker build -t ${{ steps.login-ecr.outputs.registry }}/${{inputs.service-name}}:${{ inputs.revision }} .
