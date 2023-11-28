@@ -31,6 +31,6 @@ runs:
           <hr>
           " > ./src/changelog.html
 
-        echo "\"${{github.sha}}\"" > ./src/version.txt
+        echo "${{github.ref_name}}" > ./src/version.txt
 
         git log --format="%ad - [%h]: %s" --date=format:"%d/%m/%Y %H:%M:%S" --max-count=5 --abbrev-commit >> ./src/changelog.html
