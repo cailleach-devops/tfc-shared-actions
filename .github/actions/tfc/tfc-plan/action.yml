@@ -65,7 +65,7 @@ runs:
         message: ${{ inputs.message }}
 
     - name: Get Plan Output
-      uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-plan-output@main
+      uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-plan-output@main
       id: plan-output
       with:
         token: "${{ inputs.tfc-token }}"

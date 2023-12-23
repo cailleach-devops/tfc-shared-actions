@@ -31,7 +31,7 @@ runs:
       uses: aws-actions/amazon-ecr-login@v2
 
     - name: buildAndUnityTest
-      uses: CailleachOrg/tfc-shared-actions/.github/actions/node/node-build@main
+      uses: cailleach-devops/tfc-shared-actions/.github/actions/node/node-build@main
       with:
         node-version: ${{ inputs.node-version }}
 
