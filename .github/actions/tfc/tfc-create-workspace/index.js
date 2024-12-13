@@ -42,7 +42,7 @@ try{
       .then((response) => {
         core.setOutput("workSpaceId", response.data.data.id);
       }, (error) => {
-        console.error("error: "+error.response);
+        console.error("error: "+error);
         core.setFailed(error.message);
       });
 
