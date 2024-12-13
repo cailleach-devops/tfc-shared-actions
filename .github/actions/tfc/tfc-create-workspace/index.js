@@ -6,6 +6,8 @@ try{
     const organizationName = core.getInput('organizationName');
     const token = core.getInput('token');
     const projectId = core.getInput('projectId');
+	
+	console.log("token="+ token);
 
     let request = 
     { 
