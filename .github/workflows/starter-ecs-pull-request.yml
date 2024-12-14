@@ -1,0 +1,49 @@
+name: 'ECSPullRequest'
+
+on:  
+  workflow_call:
+    inputs:
+    secrets:
+      tfc-token:
+        required: true
+
+
+jobs:
+  terraform-plan:
+    runs-on: ubuntu-latest
+
+    steps:
+    - id: checkout
+      name: checkout
+      uses: actions/checkout@v4
+      
+    - name: "Terraform DEV Plan"
+      uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-plan@main
+      with:
+        tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
+        tfc-token: "${{ secrets.tfc-token }}"
+        tfc-workspace: "aws-ecs-starter-dev"
+        tfc-cfg-directory: ''
+        scriptOrigin: '** DEV **'
+        message: "${{ github.event.pull_request.title }}"
+/*
+    - name: "Terraform HML Plan"
+      uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-plan@main
+      with:
+        tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
+        tfc-token: "${{ secrets.tfc-token }}"
+        tfc-workspace: "aws-ecs-starter-hml"
+        tfc-cfg-directory: ''
+        scriptOrigin: '** HML **'
+        message: "${{ github.event.pull_request.title }}"
+
+    - name: "Terraform PRD Plan"
+      uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-plan@main
+      with:
+        tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
+        tfc-token: "${{ secrets.tfc-token }}"
+        tfc-workspace: "aws-ecs-starter-prd"
+        tfc-cfg-directory: ''
+        scriptOrigin: '** PRD **'
+        message: "${{ github.event.pull_request.title }}"
+*/
