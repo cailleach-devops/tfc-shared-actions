@@ -18,7 +18,7 @@ jobs:
       uses: actions/checkout@v4
       
     - name: "Terraform DEV Plan"
-      uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-plan@main
+      uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-plan@starter-actions
       with:
         tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
         tfc-token: "${{ secrets.tfc-token }}"
@@ -30,7 +30,7 @@ jobs:
         message: "${{ github.event.pull_request.title }}"
 /*
     - name: "Terraform HML Plan"
-      uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-plan@main
+      uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-plan@main
       with:
         tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
         tfc-token: "${{ secrets.tfc-token }}"
@@ -42,7 +42,7 @@ jobs:
         message: "${{ github.event.pull_request.title }}"
 
     - name: "Terraform PRD Plan"
-      uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-plan@main
+      uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-plan@main
       with:
         tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
         tfc-token: "${{ secrets.tfc-token }}"
