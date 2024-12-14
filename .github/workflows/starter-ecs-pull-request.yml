@@ -23,10 +23,10 @@ jobs:
         tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
         tfc-token: "${{ secrets.tfc-token }}"
         tfc-workspace: "aws-ecs-starter-dev"
-        tfc-cfg-directory: ''
+        tfc-cfg-directory: ""
         scriptOrigin: '** DEV **'
-        clusterName: ''
-        serviceName: ''
+        clusterName: ""
+        serviceName: ""
         message: "${{ github.event.pull_request.title }}"
 
     - name: "Terraform HML Plan"
@@ -35,10 +35,10 @@ jobs:
         tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
         tfc-token: "${{ secrets.tfc-token }}"
         tfc-workspace: "aws-ecs-starter-hml"
-        tfc-cfg-directory: ''
+        tfc-cfg-directory: ""
         scriptOrigin: '** HML **'
-        clusterName: ''
-        serviceName: ''        
+        clusterName: ""
+        serviceName: ""
         message: "${{ github.event.pull_request.title }}"
 
     - name: "Terraform PRD Plan"
@@ -47,8 +47,8 @@ jobs:
         tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
         tfc-token: "${{ secrets.tfc-token }}"
         tfc-workspace: "aws-ecs-starter-prd"
-        tfc-cfg-directory: ''
+        tfc-cfg-directory: ""
         scriptOrigin: '** PRD **'
-        clusterName: ''
-        serviceName: ''        
+        clusterName: ""
+        serviceName: ""
         message: "${{ github.event.pull_request.title }}"
