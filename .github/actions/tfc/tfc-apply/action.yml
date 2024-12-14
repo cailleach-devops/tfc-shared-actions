@@ -12,12 +12,6 @@ inputs:
     description: "Workspace in Terraform Cloud to use"
   tfc-cfg-directory:
     required: true
-  country:
-    required: true
-  environment-name:
-    required: true
-  aws-region:
-    required: true
   clusterName:
     required: true    
   serviceName:
@@ -51,9 +45,6 @@ runs:
         TF_VAR_clusterName: "\"${{ inputs.clusterName }}\""
         TF_VAR_serviceName: "\"${{ inputs.serviceName }}\""
         TF_VAR_revision: "\"${{ inputs.revision }}\""
-        TF_VAR_country: "\"${{ inputs.country }}\""
-        TF_VAR_environment: "\"${{ inputs.environment-name }}\""
-        TF_VAR_region: "\"${{ inputs.aws-region }}\""
       with:
         organization: ${{ inputs.tfc-organization }}
         token: "${{ inputs.tfc-token }}"
