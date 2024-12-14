@@ -24,7 +24,7 @@ jobs:
         tfc-token: "${{ secrets.tfc-token }}"
         tfc-workspace: "aws-ecs-starter-dev"
         tfc-cfg-directory: ""
-        scriptOrigin: '** DEV **'
+        scriptOrigin: "** DEV **"
         clusterName: ""
         serviceName: ""
         message: "${{ github.event.pull_request.title }}"
@@ -36,7 +36,7 @@ jobs:
         tfc-token: "${{ secrets.tfc-token }}"
         tfc-workspace: "aws-ecs-starter-hml"
         tfc-cfg-directory: ""
-        scriptOrigin: '** HML **'
+        scriptOrigin: "** HML **"
         clusterName: ""
         serviceName: ""
         message: "${{ github.event.pull_request.title }}"
@@ -48,7 +48,7 @@ jobs:
         tfc-token: "${{ secrets.tfc-token }}"
         tfc-workspace: "aws-ecs-starter-prd"
         tfc-cfg-directory: ""
-        scriptOrigin: '** PRD **'
+        scriptOrigin: "** PRD **"
         clusterName: ""
         serviceName: ""
         message: "${{ github.event.pull_request.title }}"
