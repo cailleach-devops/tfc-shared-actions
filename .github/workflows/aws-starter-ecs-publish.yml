@@ -1,0 +1,39 @@
+name: 'OnPublishECS'
+
+on:  
+  workflow_call:
+    inputs:
+      organization:
+        type: string
+        required: true
+      environment:
+        type: string
+        required: true
+    secrets:
+      tfc-token:
+        required: true
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+
+  terraform-apply:
+    runs-on: ubuntu-latest
+
+    steps:
+    - id: checkout
+      name: checkout
+      uses: actions/checkout@v4
+     
+    - name: "Terraform Apply"
+      uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-apply@starter-actions
+      with:
+        tfc-organization: "${{ inputs.organization }}"
+        tfc-token: "${{ secrets.tfc-token }}"
+        tfc-workspace: "aws-ecs-starter-${{ inputs.environment }}"
+        tfc-cfg-directory: ""
+        clusterName: ""
+        serviceName: ""
+        message: "Creating infrastructure in ${{ inputs.environment }} environment"
