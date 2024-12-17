@@ -6,6 +6,8 @@ try{
     const organizationName = core.getInput('organizationName');
     const token = core.getInput('token');
     const projectId = core.getInput('projectId');
+	
+	console.log("token="+ token);
 
     let request = 
     { 
@@ -42,7 +44,7 @@ try{
       .then((response) => {
         core.setOutput("workSpaceId", response.data.data.id);
       }, (error) => {
-        console.error("error:"+JSON.stringify(error.response));
+        console.error("error: "+error);
         core.setFailed(error.message);
       });
 
