@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: "Create Variable"
-      uses: cailleach-devops/tfc-shared-actions/.github/actions/git/git-create-org-variable@createOrgVariable
+      uses: cailleach-devops/tfc-shared-actions/.github/actions/git/git-create-org-variable@main
       with:
         organizationName: "${{ vars.TFC_ORGANIZATION }}"        
         name: "TestVar"
