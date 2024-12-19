@@ -11,7 +11,7 @@ try{
       auth: core.getInput('token')
     })
 
-    const response = await octokit.request('POST /orgs/' + organizationName + '/actions/variables', {
+    const response = octokit.request('POST /orgs/' + organizationName + '/actions/variables', {
       org: organizationName,
       name: variableName,
       value: variableValue,
