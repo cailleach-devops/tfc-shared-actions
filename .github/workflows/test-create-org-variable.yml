@@ -15,7 +15,7 @@ jobs:
     - name: "Create Variable"
       uses: cailleach-devops/tfc-shared-actions/.github/actions/git/git-create-org-variable@main
       with:
-        organizationName: "${{ vars.TFC_ORGANIZATION }}"        
+        organizationName: "${{ vars.GIT_ORGANIZATION }}"        
         name: "TestVar"
         value: "TestValue"
         token: "${{ secrets.GH_VARIABLE_TOKEN }}"
