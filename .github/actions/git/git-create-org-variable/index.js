@@ -21,10 +21,7 @@ try{
       }
     })
 
-    if (response.status < 400) {
-        setOutput('data', response.data);
-        setOutput('status', response.status);
-    } else {
+    if (response.status >= 400) {
         core.setFailed(response.message);
     }
 
