@@ -1,0 +1,21 @@
+name: 'TestCreateOrgVariable'
+
+on:  
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+
+  create-role:
+    runs-on: ubuntu-latest
+    steps:
+    - name: "Create Variable"
+      uses: cailleach-devops/tfc-shared-actions/.github/actions/aws/aws-create-role@createOrgVariable
+      with:
+        organizationName: "${{ vars.TFC_ORGANIZATION }}"        
+        name: "TestVar"
+        value: "TestValue"
+        token: "${{ secrets.GH_VARIABLE_TOKEN }}"
