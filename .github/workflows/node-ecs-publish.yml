@@ -3,9 +3,6 @@ name: 'OnPublishECS'
 on:  
   workflow_call:
     inputs:
-      environment-name:
-        required: true
-        type: string
       aws-region:
         required: true
         type: string
@@ -20,6 +17,7 @@ on:
         required: true
 
 env:
+  environment: 'dev'
   SERVICE_TYPE: 'ecs-tasks'
 
 permissions:
@@ -32,13 +30,12 @@ jobs:
     environment: dev
     runs-on: ubuntu-latest
     steps:
-    - name: "Create ${{ inputs.environment-name }} Role"
-      uses: cailleach-devops/tfc-shared-actions/.github/actions/aws/aws-create-role@main
+    - name: "Create ${{ env.environment }} Role"
+      uses: cailleach-devops/tfc-shared-actions/.github/actions/aws/aws-create-role@updateWorkflow
       with:
-        country: ${{ vars.COUNTRY }}
         region: ${{ inputs.aws-region }}
         role: ${{ inputs.aws-role }}
-        environment-name: ${{ inputs.environment-name}}
+        environment: ${{ env.environment}}
         service-name: ${{ vars.ECS_SERVICE }}
         service-type: ${{ env.SERVICE_TYPE }}
 
@@ -56,7 +53,7 @@ jobs:
       with:
         tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
         tfc-token: "${{ secrets.tfc-token }}"
-        tfc-workspace: "${{github.event.repository.name}}-app-${{ inputs.environment-name }}"
+        tfc-workspace: "${{github.event.repository.name}}-app-${{ env.environment }}"
         tfc-cfg-directory: 'terraform/app'
         clusterName: "${{ vars.ECS_CLUSTER }}"
         serviceName: "${{ vars.ECS_SERVICE }}"
@@ -64,7 +61,7 @@ jobs:
         message: "GitHub Push in Main Branch"
         country: ${{ vars.COUNTRY }}
         aws-region: "${{ inputs.aws-region }}"
-        environment-name: ${{ inputs.environment-name }}
+        environment-name: ${{ env.environment }}
 
   app-build:
     runs-on: ubuntu-latest
@@ -123,7 +120,7 @@ jobs:
       with:
         tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
         tfc-token: "${{ secrets.tfc-token }}"
-        tfc-workspace: "${{github.event.repository.name}}-infra-${{ inputs.environment-name }}"
+        tfc-workspace: "${{github.event.repository.name}}-infra-${{ env.environment }}"
         tfc-cfg-directory: 'terraform/infra'
         clusterName: "${{ vars.ECS_CLUSTER }}"
         serviceName: "${{ vars.ECS_SERVICE }}"
@@ -131,7 +128,7 @@ jobs:
         message: "GitHub Push in Main Branch"
         country: ${{ vars.COUNTRY }}
         aws-region: "${{ inputs.aws-region }}"
-        environment-name: ${{ inputs.environment-name }}
+        environment-name: ${{ env.environment }}
 
 
   app-rollout:
