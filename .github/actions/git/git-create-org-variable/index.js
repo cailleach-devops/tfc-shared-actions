@@ -1,57 +1,59 @@
 const core = require('@actions/core');
-const { Octokit } = require('@octokit/core');
+const axios = require('axios');
 
 try{
     const variableName = core.getInput("name");
     const variableValue = core.getInput("value")
     const organizationName = core.getInput('organizationName');
-    
+    const token = core.getInput("token");
 
-    const octokit = new Octokit({
-      auth: core.getInput('token')
-    })
+    const createEndpoint = '/orgs/' + organizationName + '/actions/variables';
+    const updateEndpoint = createEndpoint + '/' + variableName;
 
-    createResponse = createVariable(octokit, organizationName, variableName, variableValue);
-
-    if (createResponse.status == 409) {
-
-        updateResponse = updateVariable(octokit, organizationName, variableName, variableValue);
-
-        if (updateResponse.status >= 400) {
-            throw { message: response.data, status: response.status }
+    const options = {
+        headers: {
+          "X-GitHub-Api-Version: 2022-11-28",
+          'Content-Type': 'application/vnd.github+json',
+          'Authorization': 'Bearer '+token
         }
+    };
 
-    } else if (createResponse.status >= 400) {
-        throw { message: response.data, status: response.status }
-    }
-
-} catch(error){
-    core.setOutput('data', error.message);
-    core.setOutput('status', error.status);
-    core.setFailed(error.message);
-}
-
-
-function createVariable(octokit, organizationName, variableName, variableValue) {
-
-    return octokit.request('POST /orgs/' + organizationName + '/actions/variables', {
+    const body = {
       name: variableName,
       value: variableValue,
-      visibility: 'all',
-      headers: {
-        'X-GitHub-Api-Version': '2022-11-28'
-      }
-    })
-}
+      visibility: 'all'
+    };
+    
+    axios.post(createEndpoint, body, options)
+        .then( (response) => {
+            console.log(response);
 
+        }, (createError) => {
+            console.log(createError.response);
 
-function updateVariable(octokit, organizationName, variableName, variableValue) {
+            if (createError.response.status == 409) {
 
-   return octokit.request('PATCH /orgs/' + organizationName + '/actions/variables/' + variableName, {
-      value: variableValue,
-      visibility: 'all',
-      headers: {
-        'X-GitHub-Api-Version': '2022-11-28'
-      }
-    })
+                axios.patch(updateEndpoint, body, options)
+                    .then( (response) => {
+                        console.log(response);
+                    }, (updateError) => {
+
+                        console.log(updateError.response);
+
+                        throw { message: error.response.message, status: error.response.status };
+
+                    }
+                    )
+
+            } else {
+                throw { message: createError.response.message, status: createError.response.status };
+            }
+
+        }
+    );
+
+} catch(anyError){
+    core.setOutput('data', anyError.message);
+    core.setOutput('status', anyError.status);
+    core.setFailed(anyError.message);
 }
