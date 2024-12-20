@@ -29,8 +29,9 @@ try{
             console.log(response);
 
         }, (createError) => {
-            console.log(createError.response);
+            console.log(createError.toJSON());
 
+/*
             if (createError.response.status == 409) {
 
                 axios.patch(updateEndpoint, body, options)
@@ -48,6 +49,7 @@ try{
             } else {
                 throw { message: createError.response.message, status: createError.response.status };
             }
+*/            
 
         }
     );
