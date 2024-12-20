@@ -11,7 +11,7 @@ try{
       auth: core.getInput('token')
     })
 
-    const response = octokit.request('POST /orgs/' + organizationName + '/actions/variables', {
+    const response = octokit.request('PATCH /orgs/' + organizationName + '/actions/variables', {
       org: organizationName,
       name: variableName,
       value: variableValue,
