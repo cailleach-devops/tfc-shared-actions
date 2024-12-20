@@ -11,11 +11,11 @@ try{
       auth: core.getInput('token')
     })
 
-    createResponse = createVariable(octokit, organization, variableName, variableValue);
+    createResponse = createVariable(octokit, organizationName, variableName, variableValue);
 
     if (createResponse.status == 409) {
 
-        updateResponse = updateVariable(octokit, organization, variableName, variableValue);
+        updateResponse = updateVariable(octokit, organizationName, variableName, variableValue);
 
         if (updateResponse.status >= 400) {
             throw { message: response.data, status: response.status }
@@ -32,7 +32,7 @@ try{
 }
 
 
-function createVariable(octokit, organization, variableName, variableValue) {
+function createVariable(octokit, organizationName, variableName, variableValue) {
 
     return octokit.request('POST /orgs/' + organizationName + '/actions/variables', {
       name: variableName,
@@ -45,7 +45,7 @@ function createVariable(octokit, organization, variableName, variableValue) {
 }
 
 
-function updateVariable(octokit, organization, variableName, variableValue) {
+function updateVariable(octokit, organizationName, variableName, variableValue) {
 
    return octokit.request('PATCH /orgs/' + organizationName + '/actions/variables/' + variableName, {
       value: variableValue,
