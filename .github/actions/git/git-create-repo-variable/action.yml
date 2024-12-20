@@ -1,8 +1,11 @@
-name: 'Create Organization Variable'
-description: 'Invoke GitHub API to create variable in Organization.'
+name: 'Create Repository Variable'
+description: 'Invoke GitHub API to create variable in Repository.'
 inputs:
   organizationName:
     description: 'GitHub organization name'
+    required: true
+  repositoryName:
+    description: 'GitHub repository name'
     required: true
   name:
     description: 'Variable name'

@@ -5,9 +5,10 @@ try{
     const variableName = core.getInput("name");
     const variableValue = core.getInput("value")
     const organizationName = core.getInput('organizationName');
+    const repositoryName = core.getInput('repositoryName');
     const token = core.getInput("token");
 
-    const createEndpoint = 'https://api.github.com/orgs/' + organizationName + '/actions/variables';
+    const createEndpoint = 'https://api.github.com/repos/' + organizationName + '/' + repositoryName + '/actions/variables';
     const updateEndpoint = createEndpoint + '/' + variableName;
 
     const options = {
