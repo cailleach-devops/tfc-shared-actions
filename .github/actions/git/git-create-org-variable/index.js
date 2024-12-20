@@ -12,7 +12,7 @@ try{
 
     const options = {
         headers: {
-          "X-GitHub-Api-Version: 2022-11-28",
+          'X-GitHub-Api-Version': '2022-11-28',
           'Content-Type': 'application/vnd.github+json',
           'Authorization': 'Bearer '+token
         }
