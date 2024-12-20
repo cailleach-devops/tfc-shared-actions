@@ -11,16 +11,14 @@ try{
       auth: core.getInput('token')
     })
 
-    const response = octokit.request('PATCH /orgs/' + organizationName + '/actions/variables', {
-      org: organizationName,
-      name: variableName,
+    const response = octokit.request('PATCH /orgs/' + organizationName + '/actions/variables/' + variableName, {
       value: variableValue,
       visibility: 'all',
       headers: {
         'X-GitHub-Api-Version': '2022-11-28'
       }
     })
-
+    
     if (response.status >= 400) {
         core.setFailed(response.message);
     }
