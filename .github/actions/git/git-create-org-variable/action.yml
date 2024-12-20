@@ -10,10 +10,14 @@ inputs:
   value:
     description: 'Variable value'
     required: true
-secrets:
   token:
     description: 'GitHub Organization Token'
     required: true
+outputs:
+    code:
+        description: Status code
+    data:
+        description: Response data    
 runs:
   using: 'node16'
   main: 'index.js'

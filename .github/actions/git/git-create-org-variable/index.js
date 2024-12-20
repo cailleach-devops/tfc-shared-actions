@@ -11,18 +11,47 @@ try{
       auth: core.getInput('token')
     })
 
-    const response = octokit.request('PATCH /orgs/' + organizationName + '/actions/variables/' + variableName, {
+    createResponse = createVariable(octokit, organization, variableName, variableValue);
+
+    if (createResponse.status == 409) {
+
+        updateResponse = updateVariable(octokit, organization, variableName, variableValue);
+
+        if (updateResponse.status >= 400) {
+            throw { message: response.data, status: response.status }
+        }
+
+    } else if (createResponse.status >= 400) {
+        throw { message: response.data, status: response.status }
+    }
+
+} catch(error){
+    core.setOutput('data', error.message);
+    core.setOutput('status', error.status);
+    core.setFailed(error.message);
+}
+
+
+function createVariable(octokit, organization, variableName, variableValue) {
+
+    return octokit.request('POST /orgs/' + organizationName + '/actions/variables', {
+      name: variableName,
       value: variableValue,
       visibility: 'all',
       headers: {
         'X-GitHub-Api-Version': '2022-11-28'
       }
     })
-    
-    if (response.status >= 400) {
-        core.setFailed(response.message);
-    }
+}
 
-} catch(error){
-    core.setFailed(error.message);
+
+function updateVariable(octokit, organization, variableName, variableValue) {
+
+   return octokit.request('PATCH /orgs/' + organizationName + '/actions/variables/' + variableName, {
+      value: variableValue,
+      visibility: 'all',
+      headers: {
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
+    })
 }
