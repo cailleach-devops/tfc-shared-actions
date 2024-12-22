@@ -1,5 +1,6 @@
 const core = require('@actions/core');
 const axios = require('axios');
+var util = require('util');
 
 try{
     const workspaceId = core.getInput('workspaceId');
@@ -34,11 +35,13 @@ try{
     axios.post(createEndpoint, body, options)
       .then((response) => {
 
-
-        core.setOutput("planOutput", allChanges);
+        // Do nothing, just be happy
+        
       }, (error) => {
-        console.error("error:"+JSON.stringify(error.response));
-        core.setFailed(error.message);
+
+        console.error("errors: ==>" + util.inspect(error.response.data.errors));
+
+        core.setFailed(error.response.data.errors[0].detail);
       });
 
 } catch(error){

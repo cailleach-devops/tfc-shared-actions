@@ -4,10 +4,10 @@ inputs:
   workspaceId:
     description: 'Terraform workspace ID'
     required: true  
-  name:
+  variableName:
     description: 'Variable name'
     required: true
-  value:
+  variableValue:
     description: 'Variable value'
     required: true  
   tfc-token:
