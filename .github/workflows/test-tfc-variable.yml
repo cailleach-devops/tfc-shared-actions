@@ -1,0 +1,21 @@
+name: 'TestCreateTfcVariable'
+
+on:  
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+
+  create-tfc-variable:
+    runs-on: ubuntu-latest
+    steps:
+    - name: "Create Variable"
+      uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-variable-workspace@testTfcVariable
+      with:
+        workspaceId: "${{ vars.DEV_WORKSPACE_ID }}"
+        name: "TestVar"
+        value: "TestValue"
+        tfc-token: "${{ secrets.TFC_TOKEN }}"
