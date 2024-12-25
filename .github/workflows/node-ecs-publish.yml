@@ -26,22 +26,28 @@ permissions:
 
 jobs:
 
-  create-role:
-    environment: dev
+  terraform-infra-apply:
     runs-on: ubuntu-latest
+
     steps:
-    - name: "Create ${{ env.environment }} Role"
-      uses: cailleach-devops/tfc-shared-actions/.github/actions/aws/aws-create-role@updateWorkflow
+    - id: checkout
+      name: checkout
+      uses: actions/checkout@v4
+
+    - name: "Terraform Infra Apply"
+      uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-apply@main
       with:
-        region: ${{ inputs.aws-region }}
-        role: ${{ inputs.aws-role }}
-        environment: ${{ env.environment}}
-        service-name: ${{ vars.ECS_SERVICE }}
-        service-type: ${{ env.SERVICE_TYPE }}
+        tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
+        tfc-token: "${{ secrets.tfc-token }}"
+        tfc-workspace: "${{github.event.repository.name}}-infra-${{ env.environment }}"
+        tfc-cfg-directory: 'terraform/infra'
+        revision: ${{ inputs.revision }}
+        message: "GitHub Push in Main Branch"
+
 
   terraform-app-apply:
     runs-on: ubuntu-latest
-    needs: [ create-role ]
+    needs: [ terraform-infra-apply ]
 
     steps:
     - id: checkout
@@ -55,17 +61,11 @@ jobs:
         tfc-token: "${{ secrets.tfc-token }}"
         tfc-workspace: "${{github.event.repository.name}}-app-${{ env.environment }}"
         tfc-cfg-directory: 'terraform/app'
-        clusterName: "${{ vars.ECS_CLUSTER }}"
-        serviceName: "${{ vars.ECS_SERVICE }}"
         revision: ${{ inputs.revision }}
         message: "GitHub Push in Main Branch"
-        country: ${{ vars.COUNTRY }}
-        aws-region: "${{ inputs.aws-region }}"
-        environment-name: ${{ env.environment }}
 
   app-build:
     runs-on: ubuntu-latest
-    needs: [ create-role ]
     steps:
     - id: checkout
       name: checkout
@@ -78,7 +78,7 @@ jobs:
 
   database-apply:
     runs-on: ubuntu-latest
-    needs: [ create-role ]
+    needs: [ terraform-infra-apply ]
     steps:
     - id: checkout
       name: checkout
@@ -105,30 +105,6 @@ jobs:
         revision: ${{ inputs.revision }}
         aws-region: ${{ inputs.aws-region }}
         aws-role: ${{ inputs.aws-role }}
-
-  infra-publish:
-    runs-on: ubuntu-latest
-    needs: [ database-apply, terraform-app-apply, app-build]
-
-    steps:
-    - id: checkout
-      name: checkout
-      uses: actions/checkout@v4
-
-    - name: "Terraform Infra Apply"
-      uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-apply@main
-      with:
-        tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
-        tfc-token: "${{ secrets.tfc-token }}"
-        tfc-workspace: "${{github.event.repository.name}}-infra-${{ env.environment }}"
-        tfc-cfg-directory: 'terraform/infra'
-        clusterName: "${{ vars.ECS_CLUSTER }}"
-        serviceName: "${{ vars.ECS_SERVICE }}"
-        revision: ${{ inputs.revision }}
-        message: "GitHub Push in Main Branch"
-        country: ${{ vars.COUNTRY }}
-        aws-region: "${{ inputs.aws-region }}"
-        environment-name: ${{ env.environment }}
 
 
   app-rollout:

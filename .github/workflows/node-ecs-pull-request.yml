@@ -3,15 +3,9 @@ name: 'NodePullRequest'
 on:  
   workflow_call:
     inputs:
-      organization:
+      tfc-organization:
         type: string
         required: true
-      clusterName:
-        required: true
-        type: string
-      serviceName:
-        required: true
-        type: string
       aws-region:
         required: true
         type: string
@@ -27,58 +21,9 @@ env:
   SERVICE_TYPE: 'ecs-tasks'
 
 jobs:
-  check-repo-config:
-    runs-on: ubuntu-latest
-
-    steps:
-    - id: checkout
-      name: checkout
-      uses: actions/checkout@v4
-      
-    - name: "CheckConfig"
-      uses: cailleach-devops/tfc-shared-actions/.github/actions/aws/ecs-check-config@main
-      with:
-        ecs-cluster: "${{ inputs.clusterName }}"
-        ecs-service: "${{ inputs.serviceName }}"
-
-  create-dev-role:
-    runs-on: ubuntu-latest
-    needs: [ check-repo-config ]
-
-    steps:    
-    - name: "Create DEV Role"
-      uses: cailleach-devops/tfc-shared-actions/.github/actions/aws/aws-create-role@updateWorkflow
-      with:
-        region: ${{ inputs.aws-region }}
-        role: ${{ inputs.aws-role }}
-        environment: ${{ env.environment }}
-        service-name: ${{ inputs.serviceName }}
-        service-type: ${{ env.SERVICE_TYPE }}
-
-  terraform-app-plan:
-    runs-on: ubuntu-latest
-    needs: [ create-dev-role ]
-
-    steps:
-    - id: checkout
-      name: checkout
-      uses: actions/checkout@v4
-      
-    - name: "Terraform App Plan"
-      uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-plan@updateWorkflow
-      with:
-        tfc-organization: "${{ inputs.organizationv }}"
-        tfc-token: "${{ secrets.tfc-token }}"
-        tfc-workspace: "${{github.event.repository.name}}-app-${{ env.environment }}"
-        tfc-cfg-directory: 'terraform/app'
-        scriptOrigin: '** Application **'
-        clusterName: "${{ inputs.clusterName }}"
-        serviceName: "${{ inputs.serviceName }}"
-        message: "${{ github.event.pull_request.title }}"
 
   terraform-infra-plan:
     runs-on: ubuntu-latest
-    needs: [ create-dev-role ]
 
     steps:
     - id: checkout
@@ -88,13 +33,30 @@ jobs:
     - name: "Terraform Infra Plan"
       uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-plan@updateWorkflow
       with:
-        tfc-organization: "${{ inputs.organization }}"
+        tfc-organization: "${{ inputs.tfc-organization }}"
         tfc-token: "${{ secrets.tfc-token }}"
         tfc-workspace: "${{github.event.repository.name}}-infra-${{ env.environment }}"
         tfc-cfg-directory: 'terraform/infra'
         scriptOrigin: '** Infrastructure **'
-        clusterName: "${{ inputs.clusterName }}"
-        serviceName: "${{ inputs.serviceName }}"
+        message: "${{ github.event.pull_request.title }}"
+
+  terraform-app-plan:
+    runs-on: ubuntu-latest
+    needs: [ terraform-infra-plan ]
+
+    steps:
+    - id: checkout
+      name: checkout
+      uses: actions/checkout@v4
+      
+    - name: "Terraform App Plan"
+      uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-plan@updateWorkflow
+      with:
+        tfc-organization: "${{ inputs.tfc-organizationv }}"
+        tfc-token: "${{ secrets.tfc-token }}"
+        tfc-workspace: "${{github.event.repository.name}}-app-${{ env.environment }}"
+        tfc-cfg-directory: 'terraform/app'
+        scriptOrigin: '** Application **'
         message: "${{ github.event.pull_request.title }}"
         
 
