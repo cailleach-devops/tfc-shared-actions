@@ -14,6 +14,7 @@ inputs:
     required: true
 outputs:
   projectName:
+    value: ${{steps.apply-run.outputs.projectName}}
 runs:
   using: "composite"
   steps:
@@ -32,7 +33,7 @@ runs:
           organization: ${{ inputs.tfc-organization }}
           token: "${{ inputs.tfc-token }}"        
           workspace: ${{ inputs.tfc-workspace }}
-          directory: "."
+          directory: ""
           speculative: false
 
 
@@ -46,7 +47,3 @@ runs:
         configuration_version: ${{ steps.apply-upload.outputs.configuration_version_id }}
         plan_only: false
         message: ${{ inputs.message }}
-
-    - name: Set outputs
-      shell: bash
-      run: echo "::set-output name=projectName::${{steps.apply-run.outputs.projectName}}"
