@@ -68,7 +68,7 @@ runs:
           });
 
           const output = 
-          `#### Terraform Cloud ${{inputs.scriptOrigin}} Output
+          `#### Terraform Cloud ${{inputs.environment}} Output
           ${{ steps.plan-output.outputs.planOutput }}`;
 
           // 3. Delete previous comment so PR timeline makes sense
