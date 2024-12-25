@@ -1,4 +1,4 @@
-name: 'Terraform Cloud Apply'
+name: 'Terraform Cloud Starter Apply'
 description: "Performs a Terraform Apply through TerraForm Cloud"
 inputs:
   tfc-organization:
@@ -10,18 +10,21 @@ inputs:
   tfc-workspace:
     required: true
     description: "Workspace in Terraform Cloud to use"
-  tfc-cfg-directory:
-    required: true
-  revision:
-    required: true
   message:
     required: true
-
+outputs:
+  projectName:
+    required: true
 runs:
   using: "composite"
   steps:
     - name: Checkout
       uses: actions/checkout@v3
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_wrapper: false      
 
     - name: Upload Configuration
       uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
@@ -30,15 +33,13 @@ runs:
           organization: ${{ inputs.tfc-organization }}
           token: "${{ inputs.tfc-token }}"        
           workspace: ${{ inputs.tfc-workspace }}
-          directory: ${{ inputs.tfc-cfg-directory }}
+          directory: "."
           speculative: false
 
 
     - name: Create Apply Run
       uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.4
       id: apply-run
-      env:
-        TF_VAR_revision: "\"${{ inputs.revision }}\""
       with:
         organization: ${{ inputs.tfc-organization }}
         token: "${{ inputs.tfc-token }}"
@@ -46,3 +47,7 @@ runs:
         configuration_version: ${{ steps.apply-upload.outputs.configuration_version_id }}
         plan_only: false
         message: ${{ inputs.message }}
+
+    - name: Set outputs
+      shell: bash
+      run: echo "::set-output name=projectName::${{steps.apply-run.outputs.projectName}}"

@@ -1,4 +1,4 @@
-name: 'ECSPullRequest'
+name: 'StarterECSPullRequest'
 
 on:  
   workflow_call:
@@ -17,37 +17,28 @@ jobs:
       uses: actions/checkout@v4
       
     - name: "Terraform DEV Plan"
-      uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-plan@main
+      uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-starter-plan@updateWorkflow
       with:
         tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
         tfc-token: "${{ secrets.tfc-token }}"
         tfc-workspace: "aws-ecs-starter-dev"
-        tfc-cfg-directory: ""
-        scriptOrigin: "** DEV **"
-        clusterName: ""
-        serviceName: ""
+        environment: "** DEV **"
         message: "${{ github.event.pull_request.title }}"
 
     - name: "Terraform HML Plan"
-      uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-plan@main
+      uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-starter-plan@updateWorkflow
       with:
         tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
         tfc-token: "${{ secrets.tfc-token }}"
         tfc-workspace: "aws-ecs-starter-hml"
-        tfc-cfg-directory: ""
-        scriptOrigin: "** HML **"
-        clusterName: ""
-        serviceName: ""
+        environment: "** HML **"
         message: "${{ github.event.pull_request.title }}"
 
     - name: "Terraform PRD Plan"
-      uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-plan@main
+      uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-starter-plan@updateWorkflow
       with:
         tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
         tfc-token: "${{ secrets.tfc-token }}"
         tfc-workspace: "aws-ecs-starter-prd"
-        tfc-cfg-directory: ""
-        scriptOrigin: "** PRD **"
-        clusterName: ""
-        serviceName: ""
+        environment: "** PRD **"
         message: "${{ github.event.pull_request.title }}"

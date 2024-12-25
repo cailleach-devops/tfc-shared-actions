@@ -1,5 +1,5 @@
-name: 'Terraform Cloud PR Validator'
-description: "Performs a Terraform Plan through TerraForm Cloud and update PR"
+name: 'Terraform Cloud Starter PR Validator'
+description: "Performs a Terraform Plan through TerraForm Cloud for a starter project"
 inputs:
   tfc-organization:
     required: true
@@ -10,10 +10,9 @@ inputs:
   tfc-workspace:
     required: true
     description: "Workspace in Terraform Cloud to use"
-  tfc-cfg-directory:
+  environment:
     required: true
-  scriptOrigin:
-    required: true
+    description: "Name of the environment"
   message:
     required: true
     description: "Reason for the terraform plan to run"
@@ -31,15 +30,13 @@ runs:
           organization: ${{ inputs.tfc-organization }}
           token: "${{ inputs.tfc-token }}"        
           workspace: ${{ inputs.tfc-workspace }}
-          directory: ${{ inputs.tfc-cfg-directory }}
+          directory: "."
           speculative: true
 
 
     - name: Create Plan Run
       uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.4
       id: plan-run
-      env:
-        TF_VAR_revision: "\"latest\""
       with:
         organization: ${{ inputs.tfc-organization }}
         token: "${{ inputs.tfc-token }}"
@@ -67,7 +64,7 @@ runs:
             issue_number: context.issue.number,
           });
           const botComment = comments.find(comment => {
-            return comment.user.type === 'Bot' && comment.body.includes('Terraform Cloud ${{inputs.scriptOrigin}} Output')
+            return comment.user.type === 'Bot' && comment.body.includes('Terraform Cloud ${{inputs.environment}} Output')
           });
 
           const output = 
