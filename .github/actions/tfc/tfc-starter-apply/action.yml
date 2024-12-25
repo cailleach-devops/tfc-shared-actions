@@ -47,3 +47,7 @@ runs:
         configuration_version: ${{ steps.apply-upload.outputs.configuration_version_id }}
         plan_only: false
         message: ${{ inputs.message }}
+
+    - name: Set outputs
+      shell: bash
+      run: echo "projectName=${{steps.apply-run.outputs.projectName}}" >> $GITHUB_OUTPUT
