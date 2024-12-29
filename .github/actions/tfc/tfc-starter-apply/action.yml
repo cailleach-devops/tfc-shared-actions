@@ -52,6 +52,8 @@ runs:
       uses: hashicorp/tfc-workflows-github/actions/plan-output@v1.3.2
       id: apply-output
       with:
+        organization: ${{ inputs.tfc-organization }}
+        token: "${{ inputs.tfc-token }}"
         plan: ${{ steps.apply-run.outputs.plan_id }}
 
     - name: Set outputs
