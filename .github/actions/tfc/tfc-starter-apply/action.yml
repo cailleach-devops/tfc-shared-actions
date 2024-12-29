@@ -48,6 +48,12 @@ runs:
         plan_only: false
         message: ${{ inputs.message }}
 
+    - name: Gather script outputs
+      uses: hashicorp/tfc-workflows-github/actions/plan-output@v1.3.2
+      id: apply-output
+      with:
+        plan: ${{ steps.apply-run.outputs.plan_id }}
+
     - name: Set outputs
       shell: bash
       run: echo "projectName=${{steps.apply-run.outputs.projectName}}" >> $GITHUB_OUTPUT
