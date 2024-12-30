@@ -14,7 +14,7 @@ inputs:
     required: true
 outputs:
   projectName:
-    value: ${{fromJSON(steps.apply-output.outputs)}} | jq '.outputs[0].value'
+    value: ${{fromJSON(steps.apply-output.outputs)}}
 runs:
   using: "composite"
   steps:
@@ -58,4 +58,6 @@ runs:
 
     - name: Set outputs
       shell: bash
-      run: echo "projectName=${{ fromJSON(steps.apply-output.outputs)}} | jq '.outputs[0].value'" >> $GITHUB_OUTPUT
+      run: |
+        echo "outputs = ${{ steps.apply-output.outputs}}"
+        echo "projectName=${{steps.apply-output.outputs}} | jq '.outputs[0].value'" >> $GITHUB_OUTPUT
