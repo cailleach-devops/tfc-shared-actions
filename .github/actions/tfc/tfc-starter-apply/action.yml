@@ -60,4 +60,4 @@ runs:
       shell: bash
       run: |
         echo "outputs = ${{ fromJSON(steps.apply-output.outputs)}}"
-        echo "projectName=${{fromJSON(steps.apply-output.outputs)}} | jq '.outputs[0].value'" >> $GITHUB_OUTPUT
+        echo "projectName=${{fromJSON(steps.apply-output.outputs)}} | jq '.outputs[] | select(.name==\"projectName\").value'" >> $GITHUB_OUTPUT
