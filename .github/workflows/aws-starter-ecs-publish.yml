@@ -1,4 +1,4 @@
-name: 'OnStarterECS'
+name: 'StarterECSPushMain'
 
 on:  
   workflow_call:
@@ -29,7 +29,7 @@ jobs:
      
     - id: tfc-apply
       name: "Terraform Apply"
-      uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-starter-apply@updateWorkflow
+      uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-starter-apply@main
       with:
         tfc-organization: "${{ inputs.organization }}"
         tfc-token: "${{ secrets.tfc-token }}"
