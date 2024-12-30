@@ -37,6 +37,7 @@ jobs:
         message: "Creating infrastructure in ${{ inputs.environment }} environment"
 
     - name: Save projectName variable
+      if: false
       uses: cailleach-devops/tfc-shared-actions/.github/actions/git/git-create-org-variable@main
       with:
         organizationName: ${{ vars.GH_VARIABLE_ORGANIZATION }}
