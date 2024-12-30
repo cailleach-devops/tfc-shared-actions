@@ -1,4 +1,4 @@
-name: 'OnPublishECS'
+name: 'OnStarterECS'
 
 on:  
   workflow_call:
@@ -27,13 +27,21 @@ jobs:
       name: checkout
       uses: actions/checkout@v4
      
-    - name: "Terraform Apply"
-      uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-apply@main
+    - id: tfc-apply
+      name: "Terraform Apply"
+      uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-starter-apply@updateWorkflow
       with:
         tfc-organization: "${{ inputs.organization }}"
         tfc-token: "${{ secrets.tfc-token }}"
         tfc-workspace: "aws-ecs-starter-${{ inputs.environment }}"
-        tfc-cfg-directory: ""
-        clusterName: ""
-        serviceName: ""
         message: "Creating infrastructure in ${{ inputs.environment }} environment"
+
+    - name: Save projectName variable
+      if: false
+      uses: cailleach-devops/tfc-shared-actions/.github/actions/git/git-create-org-variable@main
+      with:
+        organizationName: ${{ vars.GH_VARIABLE_ORGANIZATION }}
+        name: "PROJECT_NAME"
+        value: ${{ steps.tfc-apply.outputs.projectName }}
+        token: ${{ secrets.GIT_VARIABLE_TOKEN}}      
+

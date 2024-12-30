@@ -1,0 +1,87 @@
+name: 'Terraform Cloud Starter PR Validator'
+description: "Performs a Terraform Plan through TerraForm Cloud for a starter project"
+inputs:
+  tfc-organization:
+    required: true
+    description: "Organization in Terraform Cloud"
+  tfc-token:
+    required: true
+    description: "Token to interact with Terraform Cloud"
+  tfc-workspace:
+    required: true
+    description: "Workspace in Terraform Cloud to use"
+  environment:
+    required: true
+    description: "Name of the environment"
+  message:
+    required: true
+    description: "Reason for the terraform plan to run"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Upload Configuration
+      uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
+      id: plan-upload
+      with:
+          organization: ${{ inputs.tfc-organization }}
+          token: "${{ inputs.tfc-token }}"        
+          workspace: ${{ inputs.tfc-workspace }}
+          directory: "."
+          speculative: true
+
+
+    - name: Create Plan Run
+      uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.4
+      id: plan-run
+      with:
+        organization: ${{ inputs.tfc-organization }}
+        token: "${{ inputs.tfc-token }}"
+        workspace: ${{ inputs.tfc-workspace }}
+        configuration_version: ${{ steps.plan-upload.outputs.configuration_version_id }}
+        plan_only: true
+        message: ${{ inputs.message }}
+
+    - name: Get Plan Output
+      uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-plan-output@main
+      id: plan-output
+      with:
+        token: "${{ inputs.tfc-token }}"
+        planId: ${{ fromJSON(steps.plan-run.outputs.payload).data.relationships.plan.data.id }}
+
+    - name: Update PR
+      uses: actions/github-script@v6
+      id: plan-comment
+      with:
+        script: |
+          // 1. Retrieve existing bot comments for the PR
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+          });
+          const botComment = comments.find(comment => {
+            return comment.user.type === 'Bot' && comment.body.includes('Terraform Cloud ${{inputs.environment}} Output')
+          });
+
+          const output = 
+          `#### Terraform Cloud ${{inputs.environment}} Output
+          ${{ steps.plan-output.outputs.planOutput }}`;
+
+          // 3. Delete previous comment so PR timeline makes sense
+          if (botComment) {
+            github.rest.issues.deleteComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: botComment.id,
+            });
+          }
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: output
+          });
