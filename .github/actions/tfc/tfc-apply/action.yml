@@ -11,7 +11,9 @@ inputs:
     required: true
     description: "Workspace in Terraform Cloud to use"
   tfc-cfg-directory:
-    required: true
+    required: false
+    type: string
+    default: 'terraform'
   revision:
     required: true
   message:
