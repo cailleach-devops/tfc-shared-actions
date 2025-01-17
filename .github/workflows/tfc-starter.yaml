@@ -1,0 +1,60 @@
+name: 'Initialize TFC Resources'
+
+on:  
+  workflow_call:
+    inputs:
+      tfc-organization:
+        type: string
+        required: true
+      tfc-project-id: 
+        type: string
+        required: true
+      git-project:
+        type: string
+        required: true
+      environment: 
+        type: string
+        required: true
+    secrets:
+      tfc-token:
+        required: true
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  SERVICE_TYPE: 'ecs-tasks'
+    
+jobs:
+  createWorkspace:
+    runs-on: ubuntu-20.04    
+    steps:
+      - id: checkout
+        name: checkout
+        uses: actions/checkout@v4
+
+      - id: tf-create-workspace
+        name: "[${{ inputs.environment }}] Create Workspace"
+        uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-create-workspace@main
+        with:
+          workspaceName: "${{ github.event.repository.name }}-${{ inputs.environment }}"
+          organizationName: ${{ inputs.tfc-organization }}
+          token: ${{ secrets.tfc-token}}
+          projectId: ${{ inputs.tfc-project-id }}
+      - id: tf-set-cluster-variable
+        name: "[${{ inputs.environment }}] Set Workspace Cluster Variable"
+        uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-create-workspace@main
+        with:
+          workspaceId: ${{ steps.tf-create-workspace.outputs.workspaceId }}
+          token: ${{ secrets.tfc-token}}
+          variableName: 'projectName'
+          variableValue: ${{inputs.git-project}}
+      - id: tf-set-service-variable
+        name: "[${{ inputs.environment }}] Set Workspace Service Variable"
+        uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-create-workspace@main
+        with:
+          workspaceId: ${{ steps.tf-create-workspace.outputs.workspaceId }}
+          token: ${{ secrets.tfc-token}}
+          variableName: 'serviceName'
+          variableValue: ${{ github.event.repository.name }}

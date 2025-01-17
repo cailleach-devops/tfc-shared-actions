@@ -1,0 +1,30 @@
+name: 'Create Repository Variable'
+description: 'Invoke GitHub API to create variable in Repository.'
+inputs:
+  organizationName:
+    description: 'GitHub organization name'
+    required: true
+  repositoryName:
+    description: 'GitHub repository name'
+    required: true
+  name:
+    description: 'Variable name'
+    required: true
+  value:
+    description: 'Variable value'
+    required: true
+  token:
+    description: 'GitHub Organization Token'
+    required: true
+outputs:
+    code:
+        description: Status code
+    data:
+        description: Response data    
+runs:
+  using: 'node20'
+  main: 'index.js'
+
+branding:
+  icon: 'play'  
+  color: 'green'
