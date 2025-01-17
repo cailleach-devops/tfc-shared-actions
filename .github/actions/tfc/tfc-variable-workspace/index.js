@@ -6,7 +6,7 @@ try{
     const workspaceId = core.getInput('workspaceId');
     const variableName = core.getInput('variableName');
     const variableValue = core.getInput('variableValue');
-    const token = core.getInput('tfc-token');
+    const token = core.getInput('token');
 
     const createEndpoint = "https://app.terraform.io/api/v2/workspaces/"+workspaceId + "/vars";
 

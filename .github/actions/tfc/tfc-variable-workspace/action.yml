@@ -10,7 +10,7 @@ inputs:
   variableValue:
     description: 'Variable value'
     required: true  
-  tfc-token:
+  token:
     description: 'Terraform Cloud Token'
     required: true
 runs:
