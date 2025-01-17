@@ -44,7 +44,7 @@ jobs:
           projectId: ${{ inputs.tfc-project-id }}
       - id: tf-set-cluster-variable
         name: "[${{ inputs.environment }}] Set Workspace Cluster Variable"
-        uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-create-workspace@main
+        uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-variable-workspace@main
         with:
           workspaceId: ${{ steps.tf-create-workspace.outputs.workspaceId }}
           token: ${{ secrets.tfc-token}}
@@ -52,7 +52,7 @@ jobs:
           variableValue: ${{inputs.git-project}}
       - id: tf-set-service-variable
         name: "[${{ inputs.environment }}] Set Workspace Service Variable"
-        uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-create-workspace@main
+        uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-variable-workspace@main
         with:
           workspaceId: ${{ steps.tf-create-workspace.outputs.workspaceId }}
           token: ${{ secrets.tfc-token}}
