@@ -12,10 +12,6 @@ inputs:
     description: "Workspace in Terraform Cloud to use"
   tfc-cfg-directory:
     required: true
-  clusterName:
-    required: true    
-  serviceName:
-    required: true
   revision:
     required: true
   message:
@@ -42,8 +38,6 @@ runs:
       uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.4
       id: apply-run
       env:
-        TF_VAR_clusterName: "\"${{ inputs.clusterName }}\""
-        TF_VAR_serviceName: "\"${{ inputs.serviceName }}\""
         TF_VAR_revision: "\"${{ inputs.revision }}\""
       with:
         organization: ${{ inputs.tfc-organization }}
