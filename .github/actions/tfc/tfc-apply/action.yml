@@ -27,11 +27,11 @@ runs:
       uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
       id: apply-upload
       with:
-          organization: ${{ inputs.tfc-organization }}
-          token: "${{ inputs.tfc-token }}"        
-          workspace: ${{ inputs.tfc-workspace }}
-          directory: ${{ inputs.tfc-cfg-directory }}
-          speculative: false
+        organization: ${{ inputs.tfc-organization }}
+        token: "${{ inputs.tfc-token }}"        
+        workspace: ${{ inputs.tfc-workspace }}
+        directory: ${{ inputs.tfc-cfg-directory }}
+        speculative: false
 
 
     - name: Create Apply Run

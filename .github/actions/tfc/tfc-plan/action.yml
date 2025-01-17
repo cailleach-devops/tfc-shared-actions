@@ -28,11 +28,11 @@ runs:
       uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
       id: plan-upload
       with:
-          organization: ${{ inputs.tfc-organization }}
-          token: "${{ inputs.tfc-token }}"        
-          workspace: ${{ inputs.tfc-workspace }}
-          directory: ${{ inputs.tfc-cfg-directory }}
-          speculative: true
+        organization: ${{ inputs.tfc-organization }}
+        token: "${{ inputs.tfc-token }}"        
+        workspace: ${{ inputs.tfc-workspace }}
+        directory: ${{ inputs.tfc-cfg-directory }}
+        speculative: true
 
 
     - name: Create Plan Run
