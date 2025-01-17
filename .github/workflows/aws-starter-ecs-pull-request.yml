@@ -8,7 +8,7 @@ on:
 
 
 jobs:
-  terraform-plan:
+  terraform-dev-plan:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,6 +25,14 @@ jobs:
         environment: "** DEV **"
         message: "${{ github.event.pull_request.title }}"
 
+  terraform-hml-plan:
+    runs-on: ubuntu-latest
+
+    steps:
+    - id: checkout
+      name: checkout
+      uses: actions/checkout@v4
+
     - name: "Terraform HML Plan"
       uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-starter-plan@main
       with:
@@ -33,6 +41,14 @@ jobs:
         tfc-workspace: "aws-ecs-starter-hml"
         environment: "** HML **"
         message: "${{ github.event.pull_request.title }}"
+
+  terraform-prd-plan:
+    runs-on: ubuntu-latest
+
+    steps:
+    - id: checkout
+      name: checkout
+      uses: actions/checkout@v4
 
     - name: "Terraform PRD Plan"
       uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-starter-plan@main
