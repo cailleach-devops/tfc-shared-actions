@@ -41,8 +41,8 @@ runs:
 
     - name: Docker build
       shell: bash
-      run: docker build -t ${{ steps.login-ecr.outputs.registry }}/${{inputs.projectName}}-${{inputs.service-name}}-${{inputs.environment}}:${{ inputs.revision }} .
+      run: docker build -t ${{ steps.login-ecr.outputs.registry }}/${{inputs.project-name}}-${{inputs.service-name}}-${{inputs.environment}}:${{ inputs.revision }} .
 
     - name: Docker push
       shell: bash
-      run: docker push ${{ steps.login-ecr.outputs.registry }}/${{inputs.projectName}}-${{inputs.service-name}}-${{inputs.environment}}:${{ inputs.revision }}
+      run: docker push ${{ steps.login-ecr.outputs.registry }}/${{inputs.project-name}}-${{inputs.service-name}}-${{inputs.environment}}:${{ inputs.revision }}
