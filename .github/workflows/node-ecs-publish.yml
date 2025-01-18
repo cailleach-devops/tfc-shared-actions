@@ -82,7 +82,9 @@ jobs:
       uses: cailleach-devops/tfc-shared-actions/.github/actions/node/node-docker-deploy@main
       with:
         node-version: '20.x'
+        project-name: ${{ vars.PROJECT_NAME }}
         service-name: ${{github.event.repository.name}}
+        environment: ${{ env.environment}}
         revision: ${{ inputs.revision }}
         aws-region: ${{ inputs.aws-region }}
         aws-role: ${{ inputs.aws-role }}
