@@ -1,0 +1,67 @@
+name: 'AWS Create Upload role'
+description: "Create a role for uploading images"
+inputs:
+  git-project:
+    required: true
+  aws-account:
+    required: true
+  environment:
+    required: true
+  aws-region:
+    required: true
+  aws-role:
+    required: true
+outputs:
+  aws-role-name: 
+    value: ${{ steps.upload-role.outputs.arn}}    
+
+runs:
+  using: "composite"
+  steps:
+    - name: compose-role-name
+      id: upload-role
+      shell: bash
+      run: |
+        echo "name=${{inputs.git-project}}-${{ github.event.repository.name }}-upload-${{ inputs.environment}}-role" >> "$GITHUB_OUTPUT"
+        echo "arn=arn:aws:iam::${{ inputs.aws-account}}:role/${{inputs.git-project}}-${{ github.event.repository.name }}-upload-${{ inputs.environment}}-role" >> "$GITHUB_OUTPUT"
+
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: configure aws credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ inputs.aws-role }}
+        aws-region: ${{ inputs.aws-region }}
+
+    - id: check-role
+      name: Check if role exists
+      continue-on-error: true
+      shell: bash
+      run: aws iam get-role --role-name ${{steps.upload-role.outputs.name}}
+      
+
+    - name: Create AWS IAM role
+      if: steps.check-role.outcome == 'failure'
+      shell: bash
+      run: |
+
+        sed -i 's/__AWS_ACCOUNT__/${{inputs.aws-account}}/g' ${{github.action_path}}/upload-assume-role.json
+        sed -i 's/__AWS_REGION__/${{inputs.aws-region}}/g' ${{github.action_path}}/upload-assume-role.json
+        sed -i 's/__REPOSITORY__/${{ github.event.repository.name }}/g' ${{github.action_path}}/upload-assume-role.json
+        sed -i 's/__GIT_ORGANIZATION__/${{github.repository_owner}}/g' ${{github.action_path}}/upload-assume-role.json
+
+        sed -i 's/__AWS_ACCOUNT__/${{inputs.aws-account}}/g' ${{github.action_path}}/upload-policy.json
+        sed -i 's/__AWS_REGION__/${{inputs.aws-region}}/g' ${{github.action_path}}/upload-policy.json
+        sed -i 's/__SERVICE__/${{ github.event.repository.name }}/g' ${{github.action_path}}/upload-policy.json
+        sed -i 's/__PROJECT__/${{inputs.git-project}}/g' ${{github.action_path}}/upload-policy.json
+        sed -i 's/__ENVIRONMENT__/${{inputs.environment}}/g' ${{github.action_path}}/upload-policy.json
+
+        aws iam create-role \
+          --role-name ${{steps.upload-role.outputs.name}} \
+          --assume-role-policy-document file://${{github.action_path}}/upload-assume-role.json
+
+        aws iam put-role-policy \
+          --role-name ${{steps.upload-role.outputs.name}} \
+          --policy-name ${{ github.event.repository.name }}-upload-image \
+          --policy-document file://${{github.action_path}}/upload-policy.json

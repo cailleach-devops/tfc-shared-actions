@@ -1,0 +1,96 @@
+name: 'Initialize TFC Resources'
+
+on:  
+  workflow_call:
+    inputs:
+      tfc-organization:
+        type: string
+        required: true
+      tfc-project-id: 
+        type: string
+        required: true
+      git-organization:
+        type: string
+        required: true
+      git-project:
+        type: string
+        required: true
+      aws-region:
+        type: string
+        required: true
+      aws-role:
+        type: string
+        required: true
+      aws-account:
+        type: string
+        required: true
+      environment: 
+        type: string
+        required: true
+    secrets:
+      tfc-token:
+        required: true
+      git-token:
+        required: true
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  createTerraformWorkspace:
+    runs-on: ubuntu-20.04    
+    steps:
+      - id: checkout
+        name: checkout
+        uses: actions/checkout@v4
+
+      - id: tf-create-workspace
+        name: "[${{ inputs.environment }}] Create Workspace"
+        uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-create-workspace@main
+        with:
+          workspaceName: "${{ github.event.repository.name }}-${{ inputs.environment }}"
+          organizationName: ${{ inputs.tfc-organization }}
+          token: ${{ secrets.tfc-token}}
+          projectId: ${{ inputs.tfc-project-id }}
+      - id: tf-set-cluster-variable
+        name: "[${{ inputs.environment }}] Set Workspace Cluster Variable"
+        uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-variable-workspace@main
+        with:
+          workspaceId: ${{ steps.tf-create-workspace.outputs.workspaceId }}
+          token: ${{ secrets.tfc-token}}
+          variableName: 'projectName'
+          variableValue: ${{inputs.git-project}}
+      - id: tf-set-service-variable
+        name: "[${{ inputs.environment }}] Set Workspace Service Variable"
+        uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-variable-workspace@main
+        with:
+          workspaceId: ${{ steps.tf-create-workspace.outputs.workspaceId }}
+          token: ${{ secrets.tfc-token}}
+          variableName: 'serviceName'
+          variableValue: ${{ github.event.repository.name }}
+
+  createAwsRole:
+    runs-on: ubuntu-20.04    
+    steps:
+      - id: checkout
+        name: checkout
+        uses: actions/checkout@v4
+
+      - id: create-upload-role
+        name: Create Repo Role
+        uses: cailleach-devops/tfc-shared-actions/.github/actions/aws/aws-create-upload-role@main
+        with:
+          git-project: ${{ inputs.git-project}}
+          aws-account: ${{ inputs.aws-account}}
+          environment: ${{ inputs.environment }}
+          aws-region: ${{ inputs.aws-region}}
+          aws-role: ${{ inputs.aws-role}}
+      - name: Write Role in Repo
+        uses: cailleach-devops/tfc-shared-actions/.github/actions/git/git-create-repo-variable@main
+        with:
+          organizationName: ${{ inputs.git-organization }}
+          repositoryName: ${{ github.event.repository.name }}
+          name: "${{ inputs.environment}}_AWS_ROLE"
+          value: ${{steps.create-upload-role.outputs.aws-role-name}}
+          token: ${{ secrets.git-token}}

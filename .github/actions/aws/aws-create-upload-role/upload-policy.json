@@ -1,0 +1,16 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ecr:PutLifecyclePolicy",
+        "ecr:UploadLayerPart",
+        "ecr:PutImage"
+      ],
+      "Resource": "arn:aws:ecr:__AWS_REGION__:__AWS_ACCOUNT__:repository/__PROJECT__-__SERVICE__-__ENVIRONMENT__"
+    }
+  ]
+}
+
+
