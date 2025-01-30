@@ -5,10 +5,21 @@
       "Effect": "Allow",
       "Action": [
         "ecr:PutLifecyclePolicy",
+        "ecr:InitiateLayerUpload",
         "ecr:UploadLayerPart",
-        "ecr:PutImage"
+        "ecr:CompleteLayerUpload",
+        "ecr:PutImage",
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage"
       ],
       "Resource": "arn:aws:ecr:__AWS_REGION__:__AWS_ACCOUNT__:repository/__PROJECT__-__SERVICE__-__ENVIRONMENT__"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ecr:GetAuthorizationToken"
+      ],
+      "Resource": "*"
     }
   ]
 }
