@@ -3,10 +3,10 @@ const axios = require('axios');
 var util = require('util');
 
 try{
-    const workspaceId = core.getInput('workspaceId');
-    const variableName = core.getInput('variableName');
-    const variableValue = core.getInput('variableValue');
-    const token = core.getInput('token');
+    const workspaceId = core.getInput('tfc-workspace-id');
+    const variableName = core.getInput('variable-name');
+    const variableValue = core.getInput('variable-value');
+    const token = core.getInput('tfc-token');
 
     const createEndpoint = "https://app.terraform.io/api/v2/workspaces/"+workspaceId + "/vars";
 

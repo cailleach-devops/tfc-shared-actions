@@ -1,16 +1,16 @@
 name: 'Create Organization Variable'
 description: 'Invoke GitHub API to create variable in Organization.'
 inputs:
-  organizationName:
+  git-organization:
     description: 'GitHub organization name'
     required: true
-  name:
+  variable-name:
     description: 'Variable name'
     required: true
-  value:
+  variable-value:
     description: 'Variable value'
     required: true
-  token:
+  git-token:
     description: 'GitHub Organization Token'
     required: true
 outputs:

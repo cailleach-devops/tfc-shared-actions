@@ -2,8 +2,8 @@ const core = require('@actions/core');
 const axios = require('axios');
 
 try{
-    const token = core.getInput('token');
-    const planId = core.getInput('planId');
+    const token = core.getInput('tfc-token');
+    const planId = core.getInput('tfc-plan-id');
 
     const terraformEndpoint = "https://app.terraform.io/api/v2/plans/"+planId + "/json-output";
 

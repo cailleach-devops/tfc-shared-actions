@@ -12,6 +12,9 @@ on:
       aws-role:
         required: true
         type: string
+      git-project:
+        required: true
+        type: string
       revision:
         required: true
         type: string
@@ -82,7 +85,7 @@ jobs:
       uses: cailleach-devops/tfc-shared-actions/.github/actions/node/node-docker-deploy@main
       with:
         node-version: '20.x'
-        project-name: ${{ vars.PROJECT_NAME }}
+        project-name: ${{ inputs.git-project }}
         service-name: ${{github.event.repository.name}}
         environment: ${{ env.environment}}
         revision: ${{ inputs.revision }}

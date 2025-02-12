@@ -2,10 +2,10 @@ const core = require('@actions/core');
 const axios = require('axios');
 
 try{
-    const variableName = core.getInput("name");
-    const variableValue = core.getInput("value")
-    const organizationName = core.getInput('organizationName');
-    const token = core.getInput("token");
+    const variableName = core.getInput("variable-name");
+    const variableValue = core.getInput("variable-value")
+    const organizationName = core.getInput('git-organization');
+    const token = core.getInput("git-token");
 
     const createEndpoint = 'https://api.github.com/orgs/' + organizationName + '/actions/variables';
     const updateEndpoint = createEndpoint + '/' + variableName;

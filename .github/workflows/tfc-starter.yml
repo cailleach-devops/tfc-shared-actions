@@ -38,23 +38,23 @@ jobs:
         name: "[${{ inputs.environment }}] Create Workspace"
         uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-create-workspace@main
         with:
-          workspaceName: "${{ github.event.repository.name }}-${{ inputs.environment }}"
-          organizationName: ${{ inputs.tfc-organization }}
-          token: ${{ secrets.tfc-token}}
-          projectId: ${{ inputs.tfc-project-id }}
+          tfc-workspace: "${{ github.event.repository.name }}-${{ inputs.environment }}"
+          tfc-organization: ${{ inputs.tfc-organization }}
+          tfc-token: ${{ secrets.tfc-token}}
+          tfc-project-id: ${{ inputs.tfc-project-id }}
       - id: tf-set-cluster-variable
         name: "[${{ inputs.environment }}] Set Workspace Cluster Variable"
         uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-variable-workspace@main
         with:
-          workspaceId: ${{ steps.tf-create-workspace.outputs.workspaceId }}
-          token: ${{ secrets.tfc-token}}
-          variableName: 'projectName'
-          variableValue: ${{inputs.git-project}}
+          tfc-workspace-id: ${{ steps.tf-create-workspace.outputs.workspaceId }}
+          tfc-token: ${{ secrets.tfc-token}}
+          variable-name: 'projectName'
+          variable-value: ${{inputs.git-project}}
       - id: tf-set-service-variable
         name: "[${{ inputs.environment }}] Set Workspace Service Variable"
         uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-variable-workspace@main
         with:
-          workspaceId: ${{ steps.tf-create-workspace.outputs.workspaceId }}
-          token: ${{ secrets.tfc-token}}
-          variableName: 'serviceName'
-          variableValue: ${{ github.event.repository.name }}
+          tfc-workspace-id: ${{ steps.tf-create-workspace.outputs.workspaceId }}
+          tfc-token: ${{ secrets.tfc-token}}
+          variable-name: 'serviceName'
+          variable-value: ${{ github.event.repository.name }}
