@@ -44,8 +44,8 @@ jobs:
       if: false
       uses: cailleach-devops/tfc-shared-actions/.github/actions/git/git-create-org-variable@main
       with:
-        git-organization: ${{ github.repository_owner }}
-        name: "PROJECT_NAME"
-        value: ${{ steps.tfc-apply.outputs.projectName }}
+        git-organization: ${{ inputs.git-organization }}
+        variable-name: "PROJECT_NAME"
+        variable-value: ${{ steps.tfc-apply.outputs.projectName }}
         git-token: ${{ secrets.git-token}}
 
