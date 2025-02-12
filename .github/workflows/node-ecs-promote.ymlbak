@@ -37,19 +37,6 @@ permissions:
 
 jobs:
 
-  create-role:
-    runs-on: ubuntu-latest
-    steps:
-    - name: "Create ${{ inputs.to-environment_name }} Role"
-      uses: cailleach-devops/tfc-shared-actions/.github/actions/aws/aws-create-role@main
-      with:
-        country: ${{ vars.COUNTRY }}
-        region: ${{ inputs.to-aws-region }}
-        role: ${{ inputs.to-aws-role }}
-        environment: ${{ inputs.to-environment_name}}
-        service-name: ${{ vars.ECS_SERVICE }}
-        service-type: ${{ env.SERVICE_TYPE }}
-
   terraform-app-apply:
     runs-on: ubuntu-latest
     needs: [ create-role ]

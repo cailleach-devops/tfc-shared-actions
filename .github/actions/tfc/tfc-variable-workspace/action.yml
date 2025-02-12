@@ -1,16 +1,17 @@
 name: 'Create Workspace Variable'
 description: 'Invoke Terraform API to create Variables in Terraform Cloud.'
 inputs:
-  workspaceId:
+  tfc-workspace-id:
     description: 'Terraform workspace ID'
     required: true  
-  variableName:
+  variable-name:
     description: 'Variable name'
     required: true
-  variableValue:
+  variable-value:
     description: 'Variable value'
     required: true  
-  token:
+secrets:    
+  tfc-token:
     description: 'Terraform Cloud Token'
     required: true
 runs:

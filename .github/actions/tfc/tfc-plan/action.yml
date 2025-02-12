@@ -10,10 +10,6 @@ inputs:
   tfc-workspace:
     required: true
     description: "Workspace in Terraform Cloud to use"
-  tfc-cfg-directory:
-    required: false
-    type: string
-    default: 'terraform'
   scriptOrigin:
     required: true
   message:
@@ -33,7 +29,7 @@ runs:
         organization: ${{ inputs.tfc-organization }}
         token: "${{ inputs.tfc-token }}"        
         workspace: ${{ inputs.tfc-workspace }}
-        directory: ${{ inputs.tfc-cfg-directory }}
+        directory: "terraform"
         speculative: true
 
 

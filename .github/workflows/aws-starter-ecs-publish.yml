@@ -3,14 +3,18 @@ name: 'StarterECSPushMain'
 on:  
   workflow_call:
     inputs:
-      organization:
+      tfc-organization:
         type: string
+        required: true
+      git-organization:
         required: true
       environment:
         type: string
         required: true
     secrets:
       tfc-token:
+        required: true
+      git-token:
         required: true
 
 permissions:
@@ -31,17 +35,17 @@ jobs:
       name: "Terraform Apply"
       uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-starter-apply@main
       with:
-        tfc-organization: "${{ inputs.organization }}"
+        tfc-organization: "${{ inputs.tfc-organization }}"
         tfc-token: "${{ secrets.tfc-token }}"
-        tfc-workspace: "aws-ecs-starter-${{ inputs.environment }}"
+        tfc-workspace: "${{ github.event.repository.name }}-${{ inputs.environment }}"
         message: "Creating infrastructure in ${{ inputs.environment }} environment"
 
     - name: Save projectName variable
       if: false
       uses: cailleach-devops/tfc-shared-actions/.github/actions/git/git-create-org-variable@main
       with:
-        organizationName: ${{ vars.GH_VARIABLE_ORGANIZATION }}
+        git-organization: ${{ github.repository_owner }}
         name: "PROJECT_NAME"
         value: ${{ steps.tfc-apply.outputs.projectName }}
-        token: ${{ secrets.GIT_VARIABLE_TOKEN}}      
+        git-token: ${{ secrets.git-token}}
 

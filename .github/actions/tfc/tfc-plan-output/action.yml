@@ -1,12 +1,13 @@
 name: 'Output Terraform Plan'
 description: 'Invoke Terraform API to return plan output in Terraform Cloud.'
 inputs:
-  token:
-    description: 'Terraform Cloud Token'
-    required: true
-  planId:
+  tfc-plan-id:
     description: 'Plan Id'
     required: true    
+secrets:
+  tfc-token:
+    description: 'Terraform Cloud Token'
+    required: true      
 outputs:
   planOutput: 
     description: 'Plan JSON output'

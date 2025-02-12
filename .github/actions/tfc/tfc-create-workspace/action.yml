@@ -1,20 +1,21 @@
 name: 'Create Terraform Workspace'
 description: 'Invoke Terraform API to create workspace in Terraform Cloud.'
 inputs:
-  workSpaceName:
+  tfc-workspace:
     description: 'Terraform workspace name'
     required: true
-  organizationName:
+  tfc-organization:
     description: 'Terraform organization name'
     required: true
-  token:
-    description: 'Terraform Cloud Token'
-    required: true
-  projectId:
+  tfc-project-id:
     description: 'Project where the workspace will be created'
     required: true    
+secrets:
+  tfc-token:
+    description: 'Terraform Cloud Token'
+    required: true    
 outputs:
-  workSpaceId: 
+  tfc-workspace-id: 
     description: 'Terraform WorkspaceId'
 runs:
   using: 'node16'

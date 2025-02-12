@@ -1,19 +1,19 @@
 name: 'Create Repository Variable'
 description: 'Invoke GitHub API to create variable in Repository.'
 inputs:
-  organizationName:
+  git-organization:
     description: 'GitHub organization name'
     required: true
-  repositoryName:
+  git-repository:
     description: 'GitHub repository name'
     required: true
-  name:
+  variable-name:
     description: 'Variable name'
     required: true
-  value:
+  variable-value:
     description: 'Variable value'
     required: true
-  token:
+  git-token:
     description: 'GitHub Organization Token'
     required: true
 outputs:

@@ -2,6 +2,9 @@ name: 'StarterECSPullRequest'
 
 on:  
   workflow_call:
+    inputs:
+      tfc-organization:
+        required: true
     secrets:
       tfc-token:
         required: true
@@ -19,9 +22,9 @@ jobs:
     - name: "Terraform DEV Plan"
       uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-starter-plan@main
       with:
-        tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
+        tfc-organization: "${{ inputs.tfc-organizations }}"
         tfc-token: "${{ secrets.tfc-token }}"
-        tfc-workspace: "aws-ecs-starter-dev"
+        tfc-workspace: "${{ github.event.repository.name }}-dev"
         environment: "** DEV **"
         message: "${{ github.event.pull_request.title }}"
 
@@ -36,9 +39,9 @@ jobs:
     - name: "Terraform HML Plan"
       uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-starter-plan@main
       with:
-        tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
+        tfc-organization: "${{ inputs.tfc-organizations }}"
         tfc-token: "${{ secrets.tfc-token }}"
-        tfc-workspace: "aws-ecs-starter-hml"
+        tfc-workspace: "${{ github.event.repository.name }}-hml"
         environment: "** HML **"
         message: "${{ github.event.pull_request.title }}"
 
@@ -53,8 +56,8 @@ jobs:
     - name: "Terraform PRD Plan"
       uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-starter-plan@main
       with:
-        tfc-organization: "${{ vars.TFC_ORGANIZATION }}"
+        tfc-organization: "${{ inputs.tfc-organizations }}"
         tfc-token: "${{ secrets.tfc-token }}"
-        tfc-workspace: "aws-ecs-starter-prd"
+        tfc-workspace: "${{ github.event.repository.name }}-prd"
         environment: "** PRD **"
         message: "${{ github.event.pull_request.title }}"

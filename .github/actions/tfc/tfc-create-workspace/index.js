@@ -2,13 +2,11 @@ const core = require('@actions/core');
 const axios = require('axios');
 
 try{
-    const workSpaceName = core.getInput('workSpaceName');
-    const organizationName = core.getInput('organizationName');
-    const token = core.getInput('token');
-    const projectId = core.getInput('projectId');
+    const workSpaceName = core.getInput('tfc-workspace');
+    const organizationName = core.getInput('tfc-organization');
+    const token = core.getInput('tfc-token');
+    const projectId = core.getInput('tfc-project-id');
 	
-	console.log("token="+ token);
-
     let request = 
     { 
       "data" : 
