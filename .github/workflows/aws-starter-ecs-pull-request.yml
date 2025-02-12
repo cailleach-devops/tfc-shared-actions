@@ -4,6 +4,7 @@ on:
   workflow_call:
     inputs:
       tfc-organization:
+        type: string
         required: true
     secrets:
       tfc-token:
