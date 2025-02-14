@@ -1,0 +1,33 @@
+name: 'Create VariableSet'
+description: 'Invoke Terraform API to create a variable set and populate it.'
+inputs:
+  tfc-organization:
+    description: 'Terraform organization name'
+    required: true
+  tfc-varset-name:
+    description: 'Terraform variableSet name'
+    required: true
+  tfc-project-id:
+    description: 'Project where the variableSet will be linked'
+    required: true 
+
+  environment:
+    required: true   
+  aws-role:
+    required: true   
+  aws-region:
+    required: true   
+secrets:
+  tfc-token:
+    description: 'Terraform Cloud Token'
+    required: true    
+outputs:
+  tfc-workspace-id: 
+    description: 'Terraform WorkspaceId'
+runs:
+  using: 'node16'
+  main: 'index.js'
+
+branding:
+  icon: 'play'  
+  color: 'green'

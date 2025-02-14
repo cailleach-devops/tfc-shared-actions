@@ -1,0 +1,23 @@
+name: 'Create Terraform Project'
+description: 'Invoke Terraform API to create project in Terraform Cloud.'
+inputs:
+  tfc-organization:
+    description: 'Terraform organization name'
+    required: true
+  tfc-project:
+    description: 'Name of project that will be created'
+    required: true    
+secrets:
+  tfc-token:
+    description: 'Terraform Cloud Token'
+    required: true    
+outputs:
+  tfc-project-id: 
+    description: 'Terraform projectId'
+runs:
+  using: 'node16'
+  main: 'index.js'
+
+branding:
+  icon: 'play'  
+  color: 'green'
