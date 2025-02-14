@@ -15,8 +15,6 @@ on:
     secrets:
       tfc-token:
         required: true
-      git-token:
-        required: true
 
 permissions:
   contents: read
@@ -40,13 +38,3 @@ jobs:
         tfc-token: "${{ secrets.tfc-token }}"
         tfc-workspace: "${{ github.event.repository.name }}-${{ inputs.environment }}"
         message: "Creating infrastructure in ${{ inputs.environment }} environment"
-
-    - name: Save projectName variable
-      if: false
-      uses: cailleach-devops/tfc-shared-actions/.github/actions/git/git-create-org-variable@main
-      with:
-        git-organization: ${{ inputs.git-organization }}
-        variable-name: "PROJECT_NAME"
-        variable-value: ${{ steps.tfc-apply.outputs.projectName }}
-        git-token: ${{ secrets.git-token}}
-
