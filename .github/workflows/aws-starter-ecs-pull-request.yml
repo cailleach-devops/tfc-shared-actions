@@ -23,7 +23,7 @@ jobs:
     - name: "Terraform DEV Plan"
       uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-starter-plan@main
       with:
-        tfc-organization: "${{ inputs.tfc-organizations }}"
+        tfc-organization: "${{ inputs.tfc-organization }}"
         tfc-token: "${{ secrets.tfc-token }}"
         tfc-workspace: "${{ github.event.repository.name }}-dev"
         environment: "** DEV **"
@@ -40,7 +40,7 @@ jobs:
     - name: "Terraform HML Plan"
       uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-starter-plan@main
       with:
-        tfc-organization: "${{ inputs.tfc-organizations }}"
+        tfc-organization: "${{ inputs.tfc-organization }}"
         tfc-token: "${{ secrets.tfc-token }}"
         tfc-workspace: "${{ github.event.repository.name }}-hml"
         environment: "** HML **"
@@ -57,7 +57,7 @@ jobs:
     - name: "Terraform PRD Plan"
       uses: CailleachOrg/tfc-shared-actions/.github/actions/tfc/tfc-starter-plan@main
       with:
-        tfc-organization: "${{ inputs.tfc-organizations }}"
+        tfc-organization: "${{ inputs.tfc-organization }}"
         tfc-token: "${{ secrets.tfc-token }}"
         tfc-workspace: "${{ github.event.repository.name }}-prd"
         environment: "** PRD **"
