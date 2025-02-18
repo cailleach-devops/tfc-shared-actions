@@ -49,8 +49,8 @@ runs:
       uses: cailleach-devops/tfc-shared-actions/.github/actions/tfc/tfc-plan-output@main
       id: plan-output
       with:
-        token: "${{ inputs.tfc-token }}"
-        planId: ${{ fromJSON(steps.plan-run.outputs.payload).data.relationships.plan.data.id }}
+        tfc-token: "${{ inputs.tfc-token }}"
+        tfc-plan-id: ${{ fromJSON(steps.plan-run.outputs.payload).data.relationships.plan.data.id }}
 
     - name: Update PR
       uses: actions/github-script@v6
