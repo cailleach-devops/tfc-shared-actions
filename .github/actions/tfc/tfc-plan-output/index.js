@@ -24,13 +24,14 @@ try{
 `
 
         for(var curResource in response.data.resource_changes) {
-          allChanges += 
-          '|' + response.data.resource_changes[curResource].type +
-          '|' + response.data.resource_changes[curResource].name + 
-          '|' + response.data.resource_changes[curResource].change.actions.toString() + '|\n';
-        }
 
-        console.log(response.data);
+            if (response.data.resource_changes[curResource].change.actions.toString()!="no-op") {
+                  allChanges += 
+                  '|' + response.data.resource_changes[curResource].type +
+                  '|' + response.data.resource_changes[curResource].name + 
+                  '|' + response.data.resource_changes[curResource].change.actions.toString() + '|\n';
+            }
+        }
 
         core.setOutput("planOutput", allChanges);
       }, (error) => {
