@@ -14,6 +14,8 @@ inputs:
     required: true  
   git_organization:
     required: true
+  git_organization_id:
+    required: true
   aws_bucket_prefix:
     required: true    
   aws_region:
@@ -47,6 +49,7 @@ runs:
         service_name: ${{ inputs.service_name }}
         revision: ${{ inputs.revision }}
         git_organization: ${{ inputs.git_organization }}
+        git_organization_id: ${{ inputs.git_organization_id }}
         is_infra_script: ${{ inputs.is_infra_script }}        
         aws_bucket_prefix: ${{ inputs.aws_bucket_prefix }}
         aws_region: ${{ inputs.aws_region }}

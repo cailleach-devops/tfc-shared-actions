@@ -14,6 +14,8 @@ inputs:
     required: true
   git_organization:
     required: true
+  git_organization_id:
+    required: true
   aws_bucket_prefix:
     required: true
   aws_region:
@@ -92,6 +94,7 @@ runs:
           environment="${{ inputs.environment }}"
           bucket_prefix="${{ inputs.aws_bucket_prefix}}"
           git_organization="${{ inputs.git_organization }}"
+          git_organization_id="${{ inputs.git_organization_id }}"
           service_name="${{ inputs.service_name}}"
           revision="${{ inputs.revision }}"
         EOF
