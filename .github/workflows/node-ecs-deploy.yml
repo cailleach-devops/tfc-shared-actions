@@ -18,6 +18,9 @@ on:
       git_organization:
         type: string
         required: true
+      git_organization_id:
+        type: string
+        required: true
       aws_bucket_prefix:
         type: string
         required: true    
@@ -68,6 +71,7 @@ jobs:
         initiative: ${{ inputs.initiative }}
         environment: ${{ inputs.environment }}
         git_organization: ${{ inputs.git_organization }}
+        git_organization_id: ${{ inputs.git_organization_id }}
         service_name: ${{ inputs.service_name }}
         revision: ${{ inputs.revision }}
 
